@@ -45,6 +45,7 @@ dependencies {
     val retromock_version = "1.1.1"
     val lifecycle_version = "2.8.7"
     val corrutines_version = "1.10.1"
+    val navigation_version = "2.7.5"
 
 
     implementation(libs.androidx.core.ktx)
@@ -73,4 +74,8 @@ dependencies {
 
     // CORRUTINAS
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$corrutines_version")
+
+    // NAVIGATION
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
 }

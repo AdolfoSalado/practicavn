@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "practicavn"
 include(":app")
- 
+include(":domain")
+include(":data")

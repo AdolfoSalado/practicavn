@@ -44,6 +44,7 @@ dependencies {
     val retrofit_version = "2.11.0"
     val retromock_version = "1.1.1"
     val lifecycle_version = "2.8.7"
+    val corrutines_version = "1.10.1"
 
 
     implementation(libs.androidx.core.ktx)
@@ -69,4 +70,7 @@ dependencies {
     //MVVM
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+
+    // CORRUTINAS
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$corrutines_version")
 }

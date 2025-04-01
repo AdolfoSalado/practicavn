@@ -41,6 +41,8 @@ android {
 dependencies {
 
     val room_version = "2.6.1"
+    val retrofit_version = "2.11.0"
+    val retromock_version = "1.1.1"
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -54,4 +56,9 @@ dependencies {
     // ROOM
     implementation("androidx.room:room-ktx:$room_version")
     testImplementation("androidx.room:room-testing:$room_version")
+
+    // RETROFIT
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+
 }

@@ -61,4 +61,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
 
+    // RETROMOCK
+    implementation("co.infinitum:retromock:$retromock_version")
+
 }

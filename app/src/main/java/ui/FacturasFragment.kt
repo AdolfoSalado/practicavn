@@ -1,16 +1,20 @@
 package ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.adolfosalado.domain.models.Factura
 import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.databinding.FragmentFacturasBinding
+import ui.adapters.InvoiceAdapter
+
 
 class FacturasFragment : Fragment() {
     private lateinit var binding: FragmentFacturasBinding
@@ -25,13 +29,17 @@ class FacturasFragment : Fragment() {
 
         settingsToolbar(binding.toolbarFragmentFacturas)
 
+        val adapter = InvoiceAdapter(getInvoicesList())
+        binding.rvFacturas.layoutManager = LinearLayoutManager(context)
+        binding.rvFacturas.adapter = adapter
+
         return binding.root
     }
 
     fun settingsToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
-        toolbar.title = "Facturas"
-        toolbar.setNavigationIcon(R.drawable.ic_launcher_foreground)
-        toolbar.navigationIcon?.setTint(resources.getColor(R.color.white))
+
+        setTitle(toolbar)
+
         toolbar.inflateMenu(R.menu.filter_invoice_menu)
         toolbar.setNavigationOnClickListener {
             (activity as AppCompatActivity).onBackPressed()
@@ -42,9 +50,31 @@ class FacturasFragment : Fragment() {
                     Toast.makeText(context, "Atrás", Toast.LENGTH_SHORT).show()
                     true
                 }
+
                 else -> {}
             }
             false
         }
+    }
+
+    fun getInvoicesList(): List<Factura> {
+        return listOf(
+            Factura(1, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(2, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(3, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(4, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(5, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(6, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(7, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(8, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(9, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Factura(10, "31 Ago 2020", 54.56, "Pendiente de pago")
+        )
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+        val title = toolbar.findViewById<TextView>(R.id.tvTittle)
+        title.text = "Facturas"
     }
 }

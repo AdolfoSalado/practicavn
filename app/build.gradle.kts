@@ -74,4 +74,7 @@ dependencies {
     // NAVIGATION
     implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
     implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
+
+    implementation(project(":domain"))
+    implementation(project(":data"))
 }

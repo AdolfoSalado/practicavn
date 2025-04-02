@@ -1,14 +1,18 @@
 package ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.databinding.FragmentSmartSolarBinding
+import com.google.android.material.tabs.TabLayoutMediator
+import ui.adapters.ViewPagerAdapter
 
 class SmartSolarFragment : Fragment() {
     private lateinit var binding: FragmentSmartSolarBinding
@@ -20,16 +24,25 @@ class SmartSolarFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSmartSolarBinding.inflate(inflater, container, false)
 
-        settingToolbar(binding.toolbarFragmentSmart)
+        settingToolbar(binding.toolbarFragmentSmartSolar)
+
+        val adapter = ViewPagerAdapter(requireActivity())
+        binding.viewPager.adapter = adapter
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "Mi instalación"
+                1 -> tab.text = "Energía"
+                2 -> tab.text = "Detalles"
+            }
+        }.attach()
 
         return binding.root
     }
 
     private fun settingToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
-        toolbar.title = "Smart Solar"
-        toolbar.setNavigationIcon(R.drawable.ic_launcher_foreground)
-        toolbar.navigationIcon?.setTint(resources.getColor(R.color.white))
-        toolbar.inflateMenu(R.menu.filter_invoice_menu)
+
+        setTitle(toolbar)
         toolbar.setNavigationOnClickListener {
             (activity as AppCompatActivity).onBackPressed()
         }
@@ -39,9 +52,16 @@ class SmartSolarFragment : Fragment() {
                     Toast.makeText(context, "Atrás", Toast.LENGTH_SHORT).show()
                     true
                 }
+
                 else -> {}
             }
             false
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+        val title = toolbar.findViewById<TextView>(R.id.tvTittle)
+        title.text = "Smart Solar"
     }
 }

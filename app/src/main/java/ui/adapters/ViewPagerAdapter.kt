@@ -1,0 +1,25 @@
+package ui.adapters
+
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import ui.DetailsFragment
+import ui.EnergyFragment
+import ui.MyInstallationFragment
+
+class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
+    FragmentStateAdapter(fragmentActivity) {
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> MyInstallationFragment()
+            1 -> EnergyFragment()
+            2 -> DetailsFragment()
+            else -> MyInstallationFragment()
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return 3
+    }
+
+}

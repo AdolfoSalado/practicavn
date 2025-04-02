@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -40,10 +41,15 @@ class FacturasFragment : Fragment() {
 
         setTitle(toolbar)
 
-        toolbar.inflateMenu(R.menu.filter_invoice_menu)
-        toolbar.setNavigationOnClickListener {
+        val title = toolbar.findViewById<TextView>(R.id.toolbar_back_text)
+        title.text = "Consumo"
+
+        val btnBack = toolbar.findViewById<LinearLayout>(R.id.llBack)
+        btnBack.setOnClickListener {
             (activity as AppCompatActivity).onBackPressed()
         }
+
+        toolbar.inflateMenu(R.menu.filter_invoice_menu)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_next -> {

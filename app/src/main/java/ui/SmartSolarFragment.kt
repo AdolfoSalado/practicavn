@@ -1,11 +1,11 @@
 package ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +43,14 @@ class SmartSolarFragment : Fragment() {
     private fun settingToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
 
         setTitle(toolbar)
+
+        val btnBack = toolbar.findViewById<LinearLayout>(R.id.llBack)
+        btnBack.setOnClickListener {
+            (activity as AppCompatActivity).onBackPressed()
+        }
+
+
+        toolbar.inflateMenu(R.menu.filter_invoice_menu)
         toolbar.setNavigationOnClickListener {
             (activity as AppCompatActivity).onBackPressed()
         }
@@ -59,7 +67,6 @@ class SmartSolarFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setTitle(toolbar: androidx.appcompat.widget.Toolbar) {
         val title = toolbar.findViewById<TextView>(R.id.tvTittle)
         title.text = "Smart Solar"

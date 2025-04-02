@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_bar">
 
+    <fragment
+        android:id="@+id/tabFacturas"
+        android:name="ui.FacturasFragment"
+        android:label="Facturas"
+        tools:layout="@layout/fragment_facturas" />
+
+    <fragment
+        android:id="@+id/tabSmartSolar"
+        android:name="ui.SmartSolarFragment"
+        android:label="Smart Solar"
+        tools:layout="@layout/fragment_smart_solar" />
 </navigation>

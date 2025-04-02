@@ -5,56 +5,43 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.adolfosalado.practicavn.R
+import com.adolfosalado.practicavn.databinding.FragmentSmartSolarBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SmartSolarFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SmartSolarFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentSmartSolarBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_smart_solar, container, false)
+        binding = FragmentSmartSolarBinding.inflate(inflater, container, false)
+
+        settingToolbar(binding.toolbarFragmentSmart)
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SmartSolarFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SmartSolarFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun settingToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
+        toolbar.title = "Smart Solar"
+        toolbar.setNavigationIcon(R.drawable.ic_launcher_foreground)
+        toolbar.navigationIcon?.setTint(resources.getColor(R.color.white))
+        toolbar.inflateMenu(R.menu.filter_invoice_menu)
+        toolbar.setNavigationOnClickListener {
+            (activity as AppCompatActivity).onBackPressed()
+        }
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_next -> {
+                    Toast.makeText(context, "Atrás", Toast.LENGTH_SHORT).show()
+                    true
                 }
+                else -> {}
             }
+            false
+        }
     }
 }

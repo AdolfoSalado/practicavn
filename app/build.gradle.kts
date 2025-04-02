@@ -42,7 +42,6 @@ dependencies {
 
     val room_version = "2.6.1"
     val retrofit_version = "2.11.0"
-    val retromock_version = "1.1.1"
     val lifecycle_version = "2.8.7"
     val corrutines_version = "1.10.1"
     val navigation_version = "2.7.5"
@@ -64,9 +63,6 @@ dependencies {
     // RETROFIT
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
-
-    // RETROMOCK
-    implementation("co.infinitum:retromock:$retromock_version")
 
     //MVVM
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")

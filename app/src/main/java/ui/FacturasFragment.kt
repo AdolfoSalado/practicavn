@@ -39,10 +39,8 @@ class FacturasFragment : Fragment() {
 
     fun settingsToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
 
-        setTitle(toolbar)
-
-        val title = toolbar.findViewById<TextView>(R.id.toolbar_back_text)
-        title.text = "Consumo"
+        setToolbarTitle(toolbar)
+        setToolbarBackTitle(toolbar)
 
         val btnBack = toolbar.findViewById<LinearLayout>(R.id.llBack)
         btnBack.setOnClickListener {
@@ -79,8 +77,13 @@ class FacturasFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+    private fun setToolbarTitle(toolbar: androidx.appcompat.widget.Toolbar) {
         val title = toolbar.findViewById<TextView>(R.id.tvTittle)
-        title.text = "Facturas"
+        title.text = getString(R.string.facturas)
+    }
+
+    private fun setToolbarBackTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+        val title = toolbar.findViewById<TextView>(R.id.toolbarBackText)
+        title.text = getString(R.string.consumo)
     }
 }

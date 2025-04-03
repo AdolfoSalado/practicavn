@@ -4,4 +4,13 @@
     <string name="smart_solar">Smart Solar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="first_description">Aquí tienes los datos de tu instalación fotovoltaica en tiempo real.</string>
+    <string name="autoconsumo">Autoconsumo:</string>
+    <string name="numeric_value">92%</string>
+    <string name="energy_graph">Gráfico de energía</string>
+    <string name="back">Atrás</string>
+    <string name="consumo">Consumo</string>
+    <string name="amount">54,56 euros</string>
+    <string name="statusExample">Pendiente de pago</string>
+    <string name="dateExample">31 Ago 2020</string>
 </resources>

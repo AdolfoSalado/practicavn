@@ -2,4 +2,9 @@
 <resources>
     <string name="facturas">Facturas</string>
     <string name="smart_solar">Smart Solar</string>
+    <string name="first_description">Aquí tienes los datos de tu instalación fotovoltaica en tiempo real.</string>
+    <string name="autoconsumo">Autoconsumo:</string>
+    <string name="numeric_value">92%</string>
+    <string name="energy_graph">Gráfico de energía</string>
+    <string name="back">Atrás</string>
 </resources>

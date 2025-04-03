@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_next"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Atrás"
+        android:icon="@drawable/filtericon_3x"
+        android:title="@string/back"
         app:showAsAction="always" />
 </menu>

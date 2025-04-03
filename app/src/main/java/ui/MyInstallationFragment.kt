@@ -6,14 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adolfosalado.practicavn.R
+import com.adolfosalado.practicavn.databinding.FragmentMyInstallationBinding
 
 class MyInstallationFragment : Fragment() {
+    private lateinit var binding: FragmentMyInstallationBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_installation, container, false)
+        binding = FragmentMyInstallationBinding.inflate(inflater, container, false)
+
+        fillInFieldValues()
+
+        return binding.root
+    }
+
+    private fun fillInFieldValues() {
+        binding.tvFirstDescription.text = getString(R.string.first_description)
+        binding.tvSecondDescription.text = getString(R.string.autoconsumo)
+        binding.tvNumericValue.text = getString(R.string.numeric_value)
+        binding.ivGraph.setImageResource(R.drawable.grafico1)
     }
 }

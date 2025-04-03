@@ -6,6 +6,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textColorSecondary">@color/black</item>"
         <item name="bottomNavigationStyle">@style/CustomBottomNavigation</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="Theme.Practicavn" parent="Base.Theme.Practicavn" />

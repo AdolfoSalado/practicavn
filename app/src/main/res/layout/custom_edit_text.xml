@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:text="Título del campo"
+        android:textColor="@color/grey"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/etCustom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Escribe aquí"
+        android:inputType="text"
+        android:paddingTop="25dp"
+        android:paddingEnd="40dp" />
+
+    <ImageView
+        android:id="@+id/ivPopupIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@id/etCustom"
+        android:layout_alignEnd="@id/etCustom"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        android:src="@drawable/popup" />
+
+
+</RelativeLayout>

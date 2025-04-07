@@ -1,13 +1,12 @@
-package ui.adapters
+package com.adolfosalado.practicavn.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.adolfosalado.domain.models.Factura
+import com.adolfosalado.practicavn.data.models.Factura
 import com.adolfosalado.practicavn.R
-import com.adolfosalado.practicavn.databinding.InvoiceItemBinding
 
 class InvoiceAdapter(private val invoices: List<Factura>) :
     RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder>() {

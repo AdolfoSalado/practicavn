@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/tabFacturas"
-        android:name="ui.FacturasFragment"
+        android:name="com.adolfosalado.practicavn.ui.FacturasFragment"
         android:label="Facturas"
         tools:layout="@layout/fragment_facturas" />
 
     <fragment
         android:id="@+id/tabSmartSolar"
-        android:name="ui.SmartSolarFragment"
+        android:name="com.adolfosalado.practicavn.ui.SmartSolarFragment"
         android:label="Smart Solar"
         tools:layout="@layout/fragment_smart_solar" />
 </navigation>

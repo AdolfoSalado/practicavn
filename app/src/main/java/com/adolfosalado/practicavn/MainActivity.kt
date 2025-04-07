@@ -7,8 +7,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.adolfosalado.practicavn.databinding.ActivityMainBinding
-import ui.FacturasFragment
-import ui.SmartSolarFragment
+import com.adolfosalado.practicavn.ui.FacturasFragment
+import com.adolfosalado.practicavn.ui.SmartSolarFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

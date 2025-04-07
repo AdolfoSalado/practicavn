@@ -1,4 +1,4 @@
-package ui
+package com.adolfosalado.practicavn.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -9,12 +9,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.adolfosalado.domain.models.Factura
+import com.adolfosalado.practicavn.data.models.Factura
 import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.databinding.FragmentFacturasBinding
-import ui.adapters.InvoiceAdapter
+import com.adolfosalado.practicavn.ui.adapters.InvoiceAdapter
 
 
 class FacturasFragment : Fragment() {
@@ -37,7 +38,7 @@ class FacturasFragment : Fragment() {
         return binding.root
     }
 
-    fun settingsToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
+    fun settingsToolbar(toolbar: Toolbar) {
 
         setToolbarTitle(toolbar)
         setToolbarBackTitle(toolbar)
@@ -77,12 +78,12 @@ class FacturasFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setToolbarTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+    private fun setToolbarTitle(toolbar: Toolbar) {
         val title = toolbar.findViewById<TextView>(R.id.tvTittle)
         title.text = getString(R.string.facturas)
     }
 
-    private fun setToolbarBackTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+    private fun setToolbarBackTitle(toolbar: Toolbar) {
         val title = toolbar.findViewById<TextView>(R.id.toolbarBackText)
         title.text = getString(R.string.consumo)
     }

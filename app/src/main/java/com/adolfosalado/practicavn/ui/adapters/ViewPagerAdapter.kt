@@ -1,11 +1,11 @@
-package ui.adapters
+package com.adolfosalado.practicavn.ui.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ui.DetailsFragment
-import ui.EnergyFragment
-import ui.MyInstallationFragment
+import com.adolfosalado.practicavn.ui.DetailsFragment
+import com.adolfosalado.practicavn.ui.EnergyFragment
+import com.adolfosalado.practicavn.ui.MyInstallationFragment
 
 class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {

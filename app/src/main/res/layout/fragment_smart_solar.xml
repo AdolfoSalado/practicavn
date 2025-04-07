@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ui.SmartSolarFragment">
+    tools:context=".ui.SmartSolarFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarFragmentSmartSolar"

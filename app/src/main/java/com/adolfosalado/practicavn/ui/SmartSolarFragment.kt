@@ -1,4 +1,4 @@
-package ui
+package com.adolfosalado.practicavn.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,10 +9,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.databinding.FragmentSmartSolarBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import ui.adapters.ViewPagerAdapter
+import com.adolfosalado.practicavn.ui.adapters.ViewPagerAdapter
 
 class SmartSolarFragment : Fragment() {
     private lateinit var binding: FragmentSmartSolarBinding
@@ -40,7 +41,7 @@ class SmartSolarFragment : Fragment() {
         return binding.root
     }
 
-    private fun settingToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
+    private fun settingToolbar(toolbar: Toolbar) {
 
         setTitle(toolbar)
 
@@ -67,7 +68,7 @@ class SmartSolarFragment : Fragment() {
         }
     }
 
-    private fun setTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+    private fun setTitle(toolbar: Toolbar) {
         val title = toolbar.findViewById<TextView>(R.id.tvTittle)
         title.text = "Smart Solar"
     }

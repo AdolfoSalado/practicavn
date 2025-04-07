@@ -1,4 +1,4 @@
-package ui
+package com.adolfosalado.practicavn.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

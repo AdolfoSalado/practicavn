@@ -12,11 +12,13 @@ abstract class InvoiceDatabase : RoomDatabase() {
 
     abstract fun getInvoiceDao(): InvoiceDao
 
-    fun getDatabase(context: Context): InvoiceDatabase {
-        return Room.databaseBuilder(
-            context,
-            InvoiceDatabase::class.java,
-            "invoice_database"
-        ).build()
+    companion object {
+        fun getDatabase(context: Context): InvoiceDatabase {
+            return Room.databaseBuilder(
+                context,
+                InvoiceDatabase::class.java,
+                "invoice_database"
+            ).build()
+        }
     }
 }

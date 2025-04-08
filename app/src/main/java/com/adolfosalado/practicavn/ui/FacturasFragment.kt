@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.adolfosalado.practicavn.data.models.Factura
+import com.adolfosalado.practicavn.data.models.Invoice
 import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.databinding.FragmentFacturasBinding
 import com.adolfosalado.practicavn.ui.adapters.InvoiceAdapter
@@ -62,18 +62,18 @@ class FacturasFragment : Fragment() {
         }
     }
 
-    fun getInvoicesList(): List<Factura> {
+    fun getInvoicesList(): List<Invoice> {
         return listOf(
-            Factura(1, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(2, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(3, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(4, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(5, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(6, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(7, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(8, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(9, "31 Ago 2020", 54.56, "Pendiente de pago"),
-            Factura(10, "31 Ago 2020", 54.56, "Pendiente de pago")
+            Invoice(1, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(2, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(3, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(4, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(5, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(6, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(7, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(8, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(9, "31 Ago 2020", 54.56, "Pendiente de pago"),
+            Invoice(10, "31 Ago 2020", 54.56, "Pendiente de pago")
         )
     }
 

@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.adolfosalado.practicavn.data.models.Factura
+import com.adolfosalado.practicavn.data.models.Invoice
 import com.adolfosalado.practicavn.R
 
-class InvoiceAdapter(private val invoices: List<Factura>) :
+class InvoiceAdapter(private val invoices: List<Invoice>) :
     RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder>() {
 
     class InvoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -16,10 +16,10 @@ class InvoiceAdapter(private val invoices: List<Factura>) :
         val tvStatus: TextView = itemView.findViewById(R.id.tvStatus)
         val tvAmount: TextView = itemView.findViewById(R.id.tvAmount)
 
-        fun bind(factura: Factura) {
-            tvDate.text = factura.date
-            tvStatus.text = factura.status
-            tvAmount.text = factura.amount.toString()
+        fun bind(invoice: Invoice) {
+            tvDate.text = invoice.date
+            tvStatus.text = invoice.status
+            tvAmount.text = invoice.amount.toString()
         }
     }
 

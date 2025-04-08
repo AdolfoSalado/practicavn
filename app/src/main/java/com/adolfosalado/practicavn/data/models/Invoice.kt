@@ -1,3 +1,10 @@
 package com.adolfosalado.practicavn.data.models
 
-data class Invoice(var id: Int, var date: String, var amount: Double, var status: String)
+import com.google.gson.annotations.SerializedName
+
+data class Invoice(
+    @SerializedName("id") val id: Int,
+    @SerializedName("date") val date: String,
+    @SerializedName("amount") val amount: Double,
+    @SerializedName("status") val status: String
+)

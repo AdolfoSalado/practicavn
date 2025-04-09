@@ -2,9 +2,13 @@ package com.adolfosalado.practicavn.data.models
 
 import com.google.gson.annotations.SerializedName
 
+data class InvoicesResponse(
+    @SerializedName("numFacturas") val numFacturas: Int,
+    @SerializedName("facturas") val facturas: List<Invoice>
+)
+
 data class Invoice(
-    @SerializedName("id") val id: Int,
-    @SerializedName("date") val date: String,
-    @SerializedName("amount") val amount: Double,
-    @SerializedName("status") val status: String
+    @SerializedName("descEstado") val descEstado: String,
+    @SerializedName("importeOrdenacion") val importeOrdenacion: Double,
+    @SerializedName("fecha") val fecha: String
 )

@@ -45,6 +45,7 @@ dependencies {
     val lifecycle_version = "2.8.7"
     val corrutines_version = "1.10.1"
     val navigation_version = "2.7.5"
+    val okhttp3_version = "4.9.0"
 
 
     implementation(libs.androidx.core.ktx)
@@ -63,6 +64,8 @@ dependencies {
     // RETROFIT
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    implementation("com.squareup.okhttp3:okhttp:$okhttp3_version")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp3_version") // For DEBUG
 
     //MVVM
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
@@ -74,4 +77,6 @@ dependencies {
     // NAVIGATION
     implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
     implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
+
+
 }

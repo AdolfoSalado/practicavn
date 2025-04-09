@@ -7,15 +7,14 @@ import com.adolfosalado.practicavn.data.database.entities.InvoiceEntity
 
 @Dao
 interface InvoiceDao {
-
     @Query("SELECT * FROM invoice_table")
     suspend fun getAllInvoices(): List<InvoiceEntity>
 
     @Insert
-    suspend fun addInvoices(facturas: List<InvoiceEntity>)
+    suspend fun insertInvoices(invoices: List<InvoiceEntity>)
 
     @Query("SELECT COUNT(*) FROM invoice_table")
-    suspend fun getInvoicesCount(): Int
+    suspend fun getInvoiceCount(): Int
 
     @Query("DELETE FROM invoice_table")
     suspend fun deleteAllInvoices()

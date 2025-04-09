@@ -8,6 +8,7 @@ data class InvoicesResponse(
 )
 
 data class Invoice(
+    @SerializedName("id") val id: Int?,
     @SerializedName("descEstado") val descEstado: String,
     @SerializedName("importeOrdenacion") val importeOrdenacion: Double,
     @SerializedName("fecha") val fecha: String

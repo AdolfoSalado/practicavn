@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -40,13 +41,12 @@ android {
 
 dependencies {
 
-    val room_version = "2.6.1"
+    val roomVersion = "2.6.1" // o la última versión estable
     val retrofit_version = "2.11.0"
     val lifecycle_version = "2.8.7"
     val corrutines_version = "1.10.1"
     val navigation_version = "2.7.5"
     val okhttp3_version = "4.9.0"
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -57,9 +57,17 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // ROOM
-    implementation("androidx.room:room-ktx:$room_version")
-    testImplementation("androidx.room:room-testing:$room_version")
+
+
+    implementation("androidx.room:room-runtime:$roomVersion")
+
+    // Dependencias opcionales
+    implementation("androidx.room:room-ktx:$roomVersion") // Extensiones Kotlin
+    implementation("androidx.room:room-paging:$roomVersion") // Soporte para Paging 3
+    testImplementation("androidx.room:room-testing:$roomVersion") // Utilidades para pruebas
+    ksp("androidx.room:room-compiler:$roomVersion")
+
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
     // RETROFIT
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
@@ -77,6 +85,7 @@ dependencies {
     // NAVIGATION
     implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
     implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
+
 
 
 }

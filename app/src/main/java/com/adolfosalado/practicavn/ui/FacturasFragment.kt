@@ -47,12 +47,12 @@ class FacturasFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(InvoiceViewModel::class.java)
+        viewModel = ViewModelProvider(this)[InvoiceViewModel::class.java]
 
         binding.rvFacturas.layoutManager = LinearLayoutManager(context)
 
-        viewModel.invoicesResponse.observe(viewLifecycleOwner) { invoicesResponse ->
-            val listaFacturas = invoicesResponse.facturas
+        viewModel.invoicesLiveData.observe(viewLifecycleOwner) { invoicesResponse ->
+            val listaFacturas = invoicesResponse
 
             if (listaFacturas.isNotEmpty()) {
                 adapter = InvoiceAdapter(listaFacturas)

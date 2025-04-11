@@ -1,6 +1,7 @@
 package com.adolfosalado.practicavn.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -63,7 +64,6 @@ class FacturasFragment : Fragment() {
         }
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
-            // Muestra el error en la interfaz de usuario
             Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
         }
 
@@ -83,7 +83,8 @@ class FacturasFragment : Fragment() {
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_next -> {
-                    Toast.makeText(context, "Atrás", Toast.LENGTH_SHORT).show()
+                    val intent: Intent = Intent(context, InvoicesFilter::class.java)
+                    startActivity(intent)
                     true
                 }
 

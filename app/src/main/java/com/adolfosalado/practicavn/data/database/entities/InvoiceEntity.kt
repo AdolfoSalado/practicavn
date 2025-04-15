@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class InvoiceEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Int = 0,
-    @ColumnInfo(name = "date") val date: String,
+    @ColumnInfo(name = "date") val date: Long,
     @ColumnInfo(name = "amount") val amount: Double,
     @ColumnInfo(name = "status") var status: String
 )

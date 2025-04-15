@@ -1,86 +1,88 @@
 package com.adolfosalado.practicavn.data.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.adolfosalado.practicavn.data.database.InvoiceDatabaseClient
 import com.adolfosalado.practicavn.data.database.entities.InvoiceEntity
 import com.adolfosalado.practicavn.data.models.Invoice
+import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.network.RetrofitClient
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
-
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class InvoiceViewModel(application: Application) : AndroidViewModel(application) {
     private val database = InvoiceDatabaseClient.getDatabase(application)
     private val invoiceDao = database.invoiceDao()
     private val api = RetrofitClient.api
 
-    val invoicesLiveData = MutableLiveData<List<Invoice>>()
-    val error = MutableLiveData<String>()
+    private val _invoicesLiveData = MutableLiveData<List<Invoice>>()
+    val invoicesLiveData: LiveData<List<Invoice>> get() = _invoicesLiveData
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
+
+    val filterLiveData = MutableLiveData<InvoiceFilter>()
 
     init {
-        getInvoices()
+        checkForApiChangesAndUpdateRoom()
     }
 
-    fun getInvoices() {
-        viewModelScope.launch {
-            if (invoiceDao.getInvoiceCount() == 0) {
-                getInvoicesFromApiAndSaveInRoom()
-            } else {
-                verifyChangesAndGetInvoices()
-            }
-        }
-    }
-
-    private fun getInvoicesFromApiAndSaveInRoom() {
+    private fun checkForApiChangesAndUpdateRoom() {
         viewModelScope.launch {
             try {
-                val invoicesApiResponse = api.getInvoices()
-                val invoicesEntity = invoicesApiResponse.facturas.map {
-                    InvoiceEntity(
-                        date = it.fecha,
-                        amount = it.importeOrdenacion,
-                        status = it.descEstado
-                    )
+                val apiResponse = api.getInvoices()
+                val apiNumberInvoices = apiResponse.numFacturas
+                val roomNumberInvoices = invoiceDao.getInvoiceCount()
+
+                if (apiNumberInvoices != roomNumberInvoices) {
+                    invoiceDao.deleteAllInvoices()
+                    invoiceDao.insertInvoices(apiResponse.facturas.map { mapInvoiceToEntity(it) })
                 }
-                invoiceDao.deleteAllInvoices()
-                invoiceDao.insertInvoices(invoicesEntity)
-                getInvoicesFromRoom()
 
-            } catch (e: IOException) {
-                error.value = "Error de red: ${e.message}"
-            } catch (e: HttpException) {
-                error.value = "Error HTTP: ${e.code()} - ${e.message()}"
+                val updatedInvoices = invoiceDao.getAllInvoices().map { mapEntityToInvoice(it) }
+                _invoicesLiveData.postValue(updatedInvoices)
+
             } catch (e: Exception) {
-                error.value = "Error desconocido: ${e.message}"
+                _error.postValue("Error al verificar cambios: ${e.message}")
+                Log.e("API_ERROR", "Error al consultar la API: ${e.message}")
             }
         }
     }
 
-    private fun verifyChangesAndGetInvoices() {
+    fun applyFilter(filter: InvoiceFilter) {
         viewModelScope.launch {
-            if (api.getInvoices().numFacturas != invoiceDao.getInvoiceCount()) {
-                getInvoicesFromApiAndSaveInRoom()
-            } else {
-                getInvoicesFromRoom()
-            }
-        }
-    }
+            try {
+                if (filter.dateFrom != null && filter.dateTo != null && filter.dateFrom > filter.dateTo) {
+                    _error.postValue("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'")
+                    return@launch
+                }
 
-    private fun getInvoicesFromRoom() {
-        viewModelScope.launch {
-            val invoicesEntity = invoiceDao.getAllInvoices()
-            invoicesLiveData.value = invoicesEntity.map {
-                Invoice(
-                    id = it.id,
-                    fecha = it.date,
-                    importeOrdenacion = it.amount,
-                    descEstado = it.status
+                val filteredInvoices = invoiceDao.getFilteredInvoices(
+                    dateFrom = filter.dateFrom,
+                    dateTo = filter.dateTo,
+                    amount = filter.amount,
+                    statusList = filter.statusList
                 )
+                _invoicesLiveData.postValue(filteredInvoices.map { mapEntityToInvoice(it) })
+            } catch (e: Exception) {
+                _error.postValue("Error al aplicar filtro: ${e.message}")
             }
         }
+    }
+
+    private fun mapInvoiceToEntity(invoice: Invoice): InvoiceEntity {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val dateTimestamp = dateFormat.parse(invoice.date)?.time ?: 0L
+        return InvoiceEntity(0, dateTimestamp, invoice.amount, invoice.status)
+    }
+
+    private fun mapEntityToInvoice(entity: InvoiceEntity): Invoice {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return Invoice(dateFormat.format(entity.date), entity.amount, entity.status)
     }
 }

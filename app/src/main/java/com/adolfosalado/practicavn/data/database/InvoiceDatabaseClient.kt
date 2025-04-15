@@ -10,6 +10,8 @@ object InvoiceDatabaseClient {
             context,
             InvoiceDatabase::class.java,
             "invoice_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface ApiService {
 
-    @GET("/getInvoices")
+    @GET("getInvoices")
     suspend fun getInvoices(): InvoicesResponse
 }

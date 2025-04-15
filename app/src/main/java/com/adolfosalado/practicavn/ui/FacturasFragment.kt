@@ -1,107 +1,118 @@
 package com.adolfosalado.practicavn.ui
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.adolfosalado.practicavn.data.models.Invoice
 import com.adolfosalado.practicavn.R
-import com.adolfosalado.practicavn.data.repositories.InvoiceRepository
+import com.adolfosalado.practicavn.data.models.Invoice
 import com.adolfosalado.practicavn.data.viewmodels.InvoiceViewModel
 import com.adolfosalado.practicavn.databinding.FragmentFacturasBinding
 import com.adolfosalado.practicavn.ui.adapters.InvoiceAdapter
 
-
 class FacturasFragment : Fragment() {
     private lateinit var binding: FragmentFacturasBinding
-    private lateinit var viewModel: InvoiceViewModel
     private lateinit var adapter: InvoiceAdapter
+    private val viewModel: InvoiceViewModel by activityViewModels() // ViewModel compartido
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFacturasBinding.inflate(inflater, container, false)
-
-        settingsToolbar(binding.toolbarFragmentFacturas)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[InvoiceViewModel::class.java]
+        setupRecyclerView()
+        settingsToolbar(binding.toolbarFragmentFacturas)
+        observeViewModel()
+    }
 
-        binding.rvFacturas.layoutManager = LinearLayoutManager(context)
+    private fun setupRecyclerView() {
+        binding.rvFacturas.layoutManager = LinearLayoutManager(requireContext())
+        adapter = InvoiceAdapter(emptyList())
+        binding.rvFacturas.adapter = adapter
+    }
 
-        viewModel.invoicesLiveData.observe(viewLifecycleOwner) { invoicesResponse ->
-            val listaFacturas = invoicesResponse
+    private fun updateRecyclerView(facturas: List<Invoice>) {
+        if (facturas.isEmpty()) {
+            Log.d("UPDATE_RECYCLERVIEW", "No hay datos para mostrar después del filtro")
+            adapter.updateInvoices(emptyList())
+        } else {
+            adapter.updateInvoices(facturas)
+        }
+    }
 
-            if (listaFacturas.isNotEmpty()) {
-                adapter = InvoiceAdapter(listaFacturas)
-                binding.rvFacturas.adapter = adapter
-            } else {
-                Log.d("MiFragment", "La lista de facturas está vacía")
+    private fun observeViewModel() {
+        // Observa los cambios en el filtro y aplica el filtro correspondiente
+        viewModel.filterLiveData.observe(viewLifecycleOwner) { filter ->
+            filter?.let {
+                Log.d("FILTER_OBSERVED", "Observando filtro: $filter")
+                viewModel.applyFilter(it) // Aplica el filtro al ViewModel
             }
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { error ->
-            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+        // Observa las facturas filtradas y actualiza la lista
+        viewModel.invoicesLiveData.observe(viewLifecycleOwner) { invoices ->
+            if (invoices.isNotEmpty()) {
+                Log.d(
+                    "RECYCLERVIEW_UPDATE",
+                    "Actualizando RecyclerView con ${invoices.size} facturas filtradas"
+                )
+                updateRecyclerView(invoices)
+            } else {
+                Log.d(
+                    "RECYCLERVIEW_UPDATE",
+                    "No hay facturas disponibles después de aplicar el filtro"
+                )
+            }
         }
 
-        viewModel.getInvoices()
+        // Observa errores en el ViewModel
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+        }
     }
 
-    fun settingsToolbar(toolbar: Toolbar) {
+    private fun settingsToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
         setToolbarTitle(toolbar)
         setToolbarBackTitle(toolbar)
 
-        val btnBack = toolbar.findViewById<LinearLayout>(R.id.llBack)
+        val btnBack = toolbar.findViewById<android.widget.LinearLayout>(R.id.llBack)
         btnBack.setOnClickListener {
-            (activity as AppCompatActivity).onBackPressed()
+            activity?.onBackPressed()
         }
 
         toolbar.inflateMenu(R.menu.filter_invoice_menu)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_next -> {
-                    val intent: Intent = Intent(context, InvoicesFilter::class.java)
+                    val intent = Intent(requireContext(), InvoicesFilter::class.java)
                     startActivity(intent)
                     true
                 }
 
-                else -> {}
+                else -> false
             }
-            false
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun setToolbarTitle(toolbar: Toolbar) {
-        val title = toolbar.findViewById<TextView>(R.id.tvTittle)
+    private fun setToolbarTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+        val title = toolbar.findViewById<android.widget.TextView>(R.id.tvTittle)
         title.text = getString(R.string.facturas)
     }
 
-    private fun setToolbarBackTitle(toolbar: Toolbar) {
-        val title = toolbar.findViewById<TextView>(R.id.toolbarBackText)
+    private fun setToolbarBackTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+        val title = toolbar.findViewById<android.widget.TextView>(R.id.toolbarBackText)
         title.text = getString(R.string.consumo)
     }
 }

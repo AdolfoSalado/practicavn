@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.adolfosalado.practicavn.data.database.entities.InvoiceEntity
+import com.adolfosalado.practicavn.data.models.Invoice
 
 @Dao
 interface InvoiceDao {
@@ -20,10 +21,10 @@ interface InvoiceDao {
     suspend fun deleteAllInvoices()
 
     @Query("SELECT MIN(amount) FROM invoice_table")
-    suspend fun getImporteMin(): Float
+    suspend fun getImporteMin(): Double
 
     @Query("SELECT MAX(amount) FROM invoice_table")
-    suspend fun getImporteMax(): Float
+    suspend fun getImporteMax(): Double
 
     @Query("SELECT * FROM invoice_table WHERE status = :status")
     suspend fun getInvoicesByStatus(status: String): List<InvoiceEntity>
@@ -33,4 +34,20 @@ interface InvoiceDao {
 
     @Query("SELECT DISTINCT status FROM invoice_table")
     suspend fun getDistinctStatuses(): List<String>
+
+    @Query(
+        """
+    SELECT * FROM invoice_table
+    WHERE (:dateFrom IS NULL OR date >= :dateFrom)
+    AND (:dateTo IS NULL OR date <= :dateTo)
+    AND (:amount IS NULL OR amount = :amount)
+    AND (:statusList IS NULL OR status IN (:statusList))
+"""
+    )
+    suspend fun getFilteredInvoices(
+        dateFrom: Long? = null,
+        dateTo: Long? = null,
+        amount: Double? = null,
+        statusList: List<String>? = null
+    ): List<InvoiceEntity>
 }

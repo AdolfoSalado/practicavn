@@ -30,7 +30,6 @@ class InvoiceAdapter(private var invoices: List<Invoice>) :
 
     override fun getItemCount(): Int = invoices.size
 
-    // Nuevo método para actualizar los datos del adapter
     fun updateInvoices(newInvoices: List<Invoice>) {
         this.invoices = newInvoices
         notifyDataSetChanged() // Notifica al RecyclerView que los datos han cambiado

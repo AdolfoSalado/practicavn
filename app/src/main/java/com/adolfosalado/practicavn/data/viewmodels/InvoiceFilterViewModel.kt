@@ -27,10 +27,15 @@ class InvoiceFilterViewModel(application: Application) : AndroidViewModel(applic
     val filter: LiveData<InvoiceFilter> = _filter
 
     init {
-        _filter.value = InvoiceFilter() // Inicializa con valores vacíos
+        // Inicializa con valores predeterminados, por ejemplo, una lista vacía
+        _filter.value = InvoiceFilter(
+            dateFrom = null,
+            dateTo = null,
+            amount = null,
+            statusList = emptyList()
+        )
         loadAmountRange()
         loadStatusList()
-
     }
 
     fun loadAmountRange() {
@@ -56,7 +61,6 @@ class InvoiceFilterViewModel(application: Application) : AndroidViewModel(applic
         _filter.value = _filter.value?.copy(amount = _amountSelected.value?.toDouble())
         Log.d("FILTER_VIEWMODEL", "Filtro actualizado (importe): ${_filter.value}")
     }
-
 
     fun updateFilterDateFrom(newDate: Long?) {
         _filter.value = _filter.value?.copy(dateFrom = newDate)

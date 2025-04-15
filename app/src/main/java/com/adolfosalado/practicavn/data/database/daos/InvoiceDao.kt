@@ -35,19 +35,35 @@ interface InvoiceDao {
     @Query("SELECT DISTINCT status FROM invoice_table")
     suspend fun getDistinctStatuses(): List<String>
 
-    @Query(
-        """
+    @Query("""
     SELECT * FROM invoice_table
     WHERE (:dateFrom IS NULL OR date >= :dateFrom)
     AND (:dateTo IS NULL OR date <= :dateTo)
-    AND (:amount IS NULL OR amount = :amount)
-    AND (:statusList IS NULL OR status IN (:statusList))
-"""
-    )
+    AND (:amount IS NULL OR amount BETWEEN 0 AND :amount)
+    AND (:statusListSize = 0 OR status IN (:statusList))
+""")
     suspend fun getFilteredInvoices(
         dateFrom: Long? = null,
         dateTo: Long? = null,
         amount: Double? = null,
-        statusList: List<String>? = null
+        statusList: List<String> = emptyList(),
+        statusListSize: Int = 0
+    ): List<InvoiceEntity>
+
+
+    @Query(
+        """
+    SELECT * FROM invoice_table WHERE
+    (:dateFrom IS NULL OR date >= :dateFrom) AND
+    (:dateTo IS NULL OR date <= :dateTo) AND
+    (:amount IS NULL OR amount = :amount) AND
+    status IN (:statusList)
+    """
+    )
+    suspend fun getFilteredInvoicesWithStatus(
+        dateFrom: Long? = null,
+        dateTo: Long? = null,
+        amount: Double? = null,
+        statusList: List<String>
     ): List<InvoiceEntity>
 }

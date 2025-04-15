@@ -2,6 +2,7 @@ package com.adolfosalado.practicavn.data.viewmodels
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,13 +21,14 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     private val invoiceDao = database.invoiceDao()
     private val api = RetrofitClient.api
 
-    private val _invoicesLiveData = MutableLiveData<List<Invoice>>()
+    private val _invoicesLiveData = MutableLiveData<List<Invoice>>().apply { value = emptyList() }
     val invoicesLiveData: LiveData<List<Invoice>> get() = _invoicesLiveData
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
-    val filterLiveData = MutableLiveData<InvoiceFilter>()
+    private val _filterLiveData = MutableLiveData<InvoiceFilter>()
+    val filterLiveData: MutableLiveData<InvoiceFilter> get() = _filterLiveData
 
     init {
         checkForApiChangesAndUpdateRoom()
@@ -57,18 +59,18 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     fun applyFilter(filter: InvoiceFilter) {
         viewModelScope.launch {
             try {
-                if (filter.dateFrom != null && filter.dateTo != null && filter.dateFrom > filter.dateTo) {
-                    _error.postValue("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'")
-                    return@launch
-                }
+                Toast.makeText(getApplication(), "HE ENTRADO", Toast.LENGTH_SHORT).show()
 
                 val filteredInvoices = invoiceDao.getFilteredInvoices(
                     dateFrom = filter.dateFrom,
                     dateTo = filter.dateTo,
                     amount = filter.amount,
-                    statusList = filter.statusList
+                    statusList = filter.statusList ?: emptyList(),
+                    statusListSize = filter.statusList?.size ?: 0
                 )
-                _invoicesLiveData.postValue(filteredInvoices.map { mapEntityToInvoice(it) })
+
+                val mappedInvoices = filteredInvoices.map { mapEntityToInvoice(it) }
+                _invoicesLiveData.postValue(mappedInvoices)
             } catch (e: Exception) {
                 _error.postValue("Error al aplicar filtro: ${e.message}")
             }
@@ -83,6 +85,6 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
 
     private fun mapEntityToInvoice(entity: InvoiceEntity): Invoice {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return Invoice(dateFormat.format(entity.date), entity.amount, entity.status)
+        return Invoice(entity.status, entity.amount, dateFormat.format(entity.date))
     }
 }

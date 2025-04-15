@@ -7,13 +7,13 @@ data class InvoiceFilter(
     val dateFrom: Long? = null,
     val dateTo: Long? = null,
     val amount: Double? = null,
-    val statusList: List<String>? = null
+    val statusList: List<String> = emptyList()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Long::class.java.classLoader) as? Long,
         parcel.readValue(Long::class.java.classLoader) as? Long,
         parcel.readValue(Double::class.java.classLoader) as? Double,
-        parcel.createStringArrayList()
+        parcel.createStringArrayList() ?: emptyList()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -23,9 +23,7 @@ data class InvoiceFilter(
         parcel.writeStringList(statusList)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<InvoiceFilter> {
         override fun createFromParcel(parcel: Parcel): InvoiceFilter {

@@ -7,4 +7,7 @@
     <string name="numeric_value">92%</string>
     <string name="energy_graph">Gráfico de energía</string>
     <string name="back">Atrás</string>
+    <string name="mi_instalacion">Mi instalación</string>
+    <string name="energia">Energía</string>
+    <string name="detalles">Detalles</string>
 </resources>

@@ -14,4 +14,7 @@
     <string name="statusExample">Pendiente de pago</string>
     <string name="dateExample">31 Ago 2020</string>
     <string name="energy_text">Estamos trabajando en mejorar la App. Tus panales solares siguen produciendo, en breve podrás seguir viendo tu producción solar. Sentimos las molestias.</string>
+    <string name="mi_instalacion">Mi instalación</string>
+    <string name="energia">Energía</string>
+    <string name="detalles">Detalles</string>
 </resources>

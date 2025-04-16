@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.adolfosalado.practicavn.R
@@ -31,9 +30,9 @@ class SmartSolarFragment : Fragment() {
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = "Mi instalación"
-                1 -> tab.text = "Energía"
-                2 -> tab.text = "Detalles"
+                0 -> tab.text = getString(R.string.mi_instalacion)
+                1 -> tab.text = getString(R.string.energia)
+                2 -> tab.text = getString(R.string.detalles)
             }
         }.attach()
 

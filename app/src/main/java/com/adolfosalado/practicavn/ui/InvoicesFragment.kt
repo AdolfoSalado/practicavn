@@ -61,6 +61,8 @@ class InvoicesFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+
+
         viewModel.invoicesLiveData.observe(viewLifecycleOwner) { invoices ->
             Log.d("OBSERVED_INVOICES", "Facturas recibidas en el Fragment: ${invoices.size}")
             invoices.forEach {
@@ -114,4 +116,5 @@ class InvoicesFragment : Fragment() {
         val title = toolbar.findViewById<android.widget.TextView>(R.id.toolbarBackText)
         title.text = getString(R.string.consumo)
     }
+
 }

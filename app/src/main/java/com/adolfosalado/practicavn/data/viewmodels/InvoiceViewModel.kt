@@ -47,7 +47,20 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 }
 
                 val updatedInvoices = invoiceDao.getAllInvoices().map { mapEntityToInvoice(it) }
-                _invoicesLiveData.postValue(updatedInvoices)
+
+                // Aplica el ordenamiento antes de actualizar el LiveData
+                val sortedInvoices = updatedInvoices.sortedWith(
+                    compareByDescending<Invoice> { it.status == "Pendiente de pago" }
+                        .thenByDescending {
+                            SimpleDateFormat(
+                                "dd/MM/yyyy",
+                                Locale.getDefault()
+                            ).parse(it.date)?.time ?: 0L
+                        }
+                )
+
+                _invoicesLiveData.postValue(sortedInvoices)
+
 
             } catch (e: Exception) {
                 _error.postValue("Error al verificar cambios: ${e.message}")
@@ -68,7 +81,8 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 )
 
                 val mappedInvoices = filteredInvoices.map { mapEntityToInvoice(it) }
-                _invoicesLiveData.postValue(mappedInvoices)
+
+                _invoicesLiveData.postValue(sortInvoices(mappedInvoices))
             } catch (e: Exception) {
                 _error.postValue("Error al aplicar filtro: ${e.message}")
             }
@@ -84,5 +98,17 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     private fun mapEntityToInvoice(entity: InvoiceEntity): Invoice {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return Invoice(entity.status, entity.amount, dateFormat.format(entity.date))
+    }
+
+    private fun sortInvoices(invoices: List<Invoice>): List<Invoice> {
+        return invoices.sortedWith(
+            compareByDescending<Invoice> { it.status == "Pendiente de pago" }
+                .thenByDescending {
+                    SimpleDateFormat(
+                        "dd/MM/yyyy",
+                        Locale.getDefault()
+                    ).parse(it.date)?.time ?: 0L
+                }
+        )
     }
 }

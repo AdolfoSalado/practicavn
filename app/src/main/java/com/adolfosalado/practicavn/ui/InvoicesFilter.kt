@@ -4,10 +4,12 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.CheckBox
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.viewmodels.InvoiceFilterViewModel
 import com.adolfosalado.practicavn.databinding.ActivityInvoicesFilterBinding
@@ -29,6 +31,8 @@ class InvoicesFilter : AppCompatActivity() {
         setContentView(binding.root)
 
         setupListeners()
+        setToolbarTitle(binding.filterToolbar)
+        modifyToolbar()
 
         // Observando el LiveData del filtro para mantener los valores cuando regresamos a esta Activity
         filterViewModel.filter.observe(this) { filter ->
@@ -85,6 +89,18 @@ class InvoicesFilter : AppCompatActivity() {
             resultIntent.putExtra("filter", filter)
             setResult(RESULT_OK, resultIntent)
             finish()
+        }
+
+        binding.btnDeleteFilters?.setOnClickListener {
+
+            binding.inputFechaDesde.setText("")
+            binding.inputFechaHasta.setText("")
+            binding.sliderImporte.value = 0f
+            binding.layoutEstados.children.forEach { checkbox ->
+                if (checkbox is CheckBox) {
+                    checkbox.isChecked = false
+                }
+            }
         }
     }
 
@@ -155,6 +171,32 @@ class InvoicesFilter : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val date = Date(dateInMillis)
         return sdf.format(date)
+    }
+
+    private fun setToolbarTitle(toolbar: androidx.appcompat.widget.Toolbar) {
+        val title = toolbar.findViewById<android.widget.TextView>(R.id.tvTittle)
+        title.text = "Filtrar facturas"
+
+    }
+
+    private fun modifyToolbar() {
+        val btnBack = binding.filterToolbar.findViewById<android.widget.LinearLayout>(R.id.llBack)
+        btnBack.visibility = View.INVISIBLE
+
+        binding.filterToolbar.inflateMenu(R.menu.filter_invoice_menu)
+
+        val item = binding.filterToolbar.menu.findItem(R.id.action_menu)
+        item.icon = resources.getDrawable(R.drawable.close_icon)
+
+        binding.filterToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_menu -> {
+                    finish()
+                    true
+                }
+            }
+            false
+        }
     }
 }
 

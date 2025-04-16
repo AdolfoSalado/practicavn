@@ -17,4 +17,5 @@
     <string name="mi_instalacion">Mi instalación</string>
     <string name="energia">Energía</string>
     <string name="detalles">Detalles</string>
+    <string name="pendiente_de_pago">Pendiente de pago</string>
 </resources>

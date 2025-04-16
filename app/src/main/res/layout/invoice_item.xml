@@ -20,7 +20,8 @@
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/dateExample" />
+                android:hint="@string/dateExample"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvStatus"
@@ -41,12 +42,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:hint="@string/amount" />
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
+                android:layout_marginStart="20dp"
+                android:contentDescription="Flecha"
                 android:gravity="center"
                 android:src="@drawable/arrow"
                 app:tint="@color/grey" />

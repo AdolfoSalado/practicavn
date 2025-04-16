@@ -93,7 +93,7 @@ class InvoicesFragment : Fragment() {
         toolbar.inflateMenu(R.menu.filter_invoice_menu)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.action_next -> {
+                R.id.action_menu -> {
                     val intent = Intent(requireContext(), InvoicesFilter::class.java)
                     viewModel.filterLiveData.value?.let {
                         intent.putExtra("filter", it)

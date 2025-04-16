@@ -48,27 +48,10 @@ class SmartSolarFragment : Fragment() {
         btnBack.setOnClickListener {
             (activity as AppCompatActivity).onBackPressed()
         }
-
-
-        toolbar.inflateMenu(R.menu.filter_invoice_menu)
-        toolbar.setNavigationOnClickListener {
-            (activity as AppCompatActivity).onBackPressed()
-        }
-        toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_next -> {
-                    Toast.makeText(context, "Atrás", Toast.LENGTH_SHORT).show()
-                    true
-                }
-
-                else -> {}
-            }
-            false
-        }
     }
 
     private fun setTitle(toolbar: Toolbar) {
         val title = toolbar.findViewById<TextView>(R.id.tvTittle)
-        title.text = "Smart Solar"
+        title.text = getString(R.string.smart_solar)
     }
 }

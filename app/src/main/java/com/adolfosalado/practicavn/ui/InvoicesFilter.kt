@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.viewmodels.InvoiceFilterViewModel
-import com.adolfosalado.practicavn.data.viewmodels.InvoiceViewModel
 import com.adolfosalado.practicavn.databinding.ActivityInvoicesFilterBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,13 +17,11 @@ import java.util.*
 class InvoicesFilter : AppCompatActivity() {
     private lateinit var binding: ActivityInvoicesFilterBinding
     private val filterViewModel: InvoiceFilterViewModel by viewModels()
-    private val viewModel: InvoiceViewModel by viewModels()
 
     private var dateFromMillis: Long? = null
     private var dateToMillis: Long? = null
 
     private val statusCheckboxes = mutableListOf<CheckBox>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +65,6 @@ class InvoicesFilter : AppCompatActivity() {
                 Log.e("InvoicesFilter", "El filtro está vacío o es nulo")
             }
         }
-
 
         // Botón de aplicar filtros
         binding.btnAplicarFiltros.setOnClickListener {
@@ -118,15 +114,15 @@ class InvoicesFilter : AppCompatActivity() {
                     val date = Calendar.getInstance()
                     date.set(year, month, day, 23, 59, 59)
                     dateToMillis = date.timeInMillis
-                    val formattedDate = formatDateToString(dateToMillis) // Convertir a String
-                    binding.inputFechaHasta.setText(formattedDate) // Mostrar en el UI
+                    val formattedDate = formatDateToString(dateToMillis)
+                    binding.inputFechaHasta.setText(formattedDate)
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
-        
+
         // Estados dinámicos
         filterViewModel.statusList.observe(this) { statuses ->
             binding.layoutEstados.removeAllViews()
@@ -142,7 +138,7 @@ class InvoicesFilter : AppCompatActivity() {
         }
 
         filterViewModel.amountRange.observe(this) { maxAmount ->
-            binding.sliderImporte.valueTo = maxAmount.toFloat() // ajusta el valor máximo
+            binding.sliderImporte.valueTo = maxAmount.toFloat() // Ajusta el valor máximo
             binding.textRangoImporte.text =
                 "${binding.sliderImporte.value.toInt()} € - ${binding.sliderImporte.valueTo.toInt()} €"
         }
@@ -151,13 +147,15 @@ class InvoicesFilter : AppCompatActivity() {
             binding.textRangoImporte.text = amount.toString()
         }
     }
+
+
+    // Función para convertir Long (fecha en milisegundos) a String con formato dd/MM/yyyy
+    private fun formatDateToString(dateInMillis: Long?): String? {
+        if (dateInMillis == null) return null
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = Date(dateInMillis)
+        return sdf.format(date)
+    }
 }
 
-// Función para convertir Long (fecha en milisegundos) a String con formato dd/MM/yyyy
-fun formatDateToString(dateInMillis: Long?): String? {
-    if (dateInMillis == null) return null
-    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    val date = Date(dateInMillis)
-    return sdf.format(date)
-}
 

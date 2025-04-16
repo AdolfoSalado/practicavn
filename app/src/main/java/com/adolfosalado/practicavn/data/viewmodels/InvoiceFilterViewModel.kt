@@ -27,7 +27,6 @@ class InvoiceFilterViewModel(application: Application) : AndroidViewModel(applic
     val filter: LiveData<InvoiceFilter> = _filter
 
     init {
-        // Inicializa con valores predeterminados, por ejemplo, una lista vacía
         _filter.value = InvoiceFilter(
             dateFrom = null,
             dateTo = null,

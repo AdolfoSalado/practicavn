@@ -7,7 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.adolfosalado.practicavn.databinding.ActivityMainBinding
-import com.adolfosalado.practicavn.ui.FacturasFragment
+import com.adolfosalado.practicavn.ui.InvoicesFragment
 import com.adolfosalado.practicavn.ui.SmartSolarFragment
 
 class MainActivity : AppCompatActivity() {
@@ -20,11 +20,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        changeFragment(FacturasFragment())
+        changeFragment(InvoicesFragment())
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.tabFacturas -> changeFragment(FacturasFragment())
+                R.id.tabFacturas -> changeFragment(InvoicesFragment())
                 R.id.tabSmartSolar -> changeFragment(SmartSolarFragment())
                 else -> {}
             }

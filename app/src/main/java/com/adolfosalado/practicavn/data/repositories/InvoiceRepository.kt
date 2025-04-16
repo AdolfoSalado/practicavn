@@ -11,8 +11,8 @@ class InvoiceRepository(private val invoiceDao: InvoiceDao) {
         filter: InvoiceFilter
     ): List<InvoiceEntity> {
         return invoiceDao.getFilteredInvoices(
-            dateFrom = filter.dateFrom as Long?,
-            dateTo = filter.dateTo as Long?,
+            dateFrom = filter.dateFrom,
+            dateTo = filter.dateTo,
             amount = filter.amount,
             statusList = filter.statusList
         )

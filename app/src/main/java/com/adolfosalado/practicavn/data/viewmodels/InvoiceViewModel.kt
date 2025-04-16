@@ -59,8 +59,6 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     fun applyFilter(filter: InvoiceFilter) {
         viewModelScope.launch {
             try {
-                Toast.makeText(getApplication(), "HE ENTRADO", Toast.LENGTH_SHORT).show()
-
                 val filteredInvoices = invoiceDao.getFilteredInvoices(
                     dateFrom = filter.dateFrom,
                     dateTo = filter.dateTo,

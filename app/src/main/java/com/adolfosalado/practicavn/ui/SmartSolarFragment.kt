@@ -22,7 +22,6 @@ class SmartSolarFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentSmartSolarBinding.inflate(inflater, container, false)
 
         settingToolbar(binding.toolbarFragmentSmartSolar)

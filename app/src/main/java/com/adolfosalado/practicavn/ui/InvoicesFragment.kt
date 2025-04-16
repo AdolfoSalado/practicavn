@@ -19,11 +19,10 @@ import com.adolfosalado.practicavn.data.viewmodels.InvoiceViewModel
 import com.adolfosalado.practicavn.databinding.FragmentFacturasBinding
 import com.adolfosalado.practicavn.ui.adapters.InvoiceAdapter
 
-class FacturasFragment : Fragment() {
+class InvoicesFragment : Fragment() {
     private lateinit var binding: FragmentFacturasBinding
     private lateinit var adapter: InvoiceAdapter
     private val viewModel: InvoiceViewModel by activityViewModels() // ViewModel compartido
-
 
     private val filterLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -43,19 +42,15 @@ class FacturasFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFacturasBinding.inflate(inflater, container, false)
-
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         observeViewModel()
         setupRecyclerView()
         settingsToolbar(binding.toolbarFragmentFacturas)
-
 
     }
 
@@ -66,13 +61,6 @@ class FacturasFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        /*viewModel.filterLiveData.observe(viewLifecycleOwner) { filter ->
-            filter?.let {
-                Log.d("FILTER_OBSERVED", "Observando filtro: $filter")
-                viewModel.applyFilter(filter) // Aplica el filtro al ViewModel
-            }
-        }*/
-
         viewModel.invoicesLiveData.observe(viewLifecycleOwner) { invoices ->
             Log.d("OBSERVED_INVOICES", "Facturas recibidas en el Fragment: ${invoices.size}")
             invoices.forEach {
@@ -81,9 +69,9 @@ class FacturasFragment : Fragment() {
             updateRecyclerView(invoices)
         }
 
-        /*viewModel.error.observe(viewLifecycleOwner) { error ->
+        viewModel.error.observe(viewLifecycleOwner) { error ->
             Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
-        }*/
+        }
     }
 
     private fun updateRecyclerView(invoices: List<Invoice>) {

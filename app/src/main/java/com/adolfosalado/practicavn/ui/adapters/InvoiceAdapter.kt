@@ -1,5 +1,6 @@
 package com.adolfosalado.practicavn.ui.adapters
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,21 @@ class InvoiceAdapter(private var invoices: List<Invoice>) :
             } else {
                 binding.tvStatus.visibility = View.INVISIBLE
             }
+
+            // Establecer OnClickListener para la celda
+            itemView.setOnClickListener {
+                val builder = AlertDialog.Builder(itemView.context)
+                    .setTitle("Información")
+                    .setMessage("Esta funcionalidad aún no está disponible")
+                    .setNegativeButton("Cerrar") { dialog, _ ->
+                        dialog.dismiss() // Cierra el diálogo al hacer clic en "Cerrar"
+                    }
+
+                val alertDialog = builder.show()
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    .setTextColor(itemView.context.getColor(R.color.green))
+            }
+
         }
     }
 

@@ -6,6 +6,7 @@
     android:padding="15dp">
 
     <TextView
+        android:id="@+id/tvTitleOfDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="4dp"
@@ -18,9 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Escribe aquí"
-        android:inputType="text"
+        android:inputType="textMultiLine"
+        android:gravity="top|start"
         android:paddingTop="25dp"
-        android:paddingEnd="40dp" />
+        android:paddingEnd="40dp"
+        android:minLines="1"
+        android:maxLines="5" />
 
     <ImageView
         android:id="@+id/ivPopupIcon"

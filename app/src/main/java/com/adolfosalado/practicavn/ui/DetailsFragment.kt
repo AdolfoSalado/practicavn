@@ -1,13 +1,17 @@
 package com.adolfosalado.practicavn.ui
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -39,7 +43,7 @@ class DetailsFragment : Fragment() {
         }
 
         binding.etEstado.ivPopupIcon.setOnClickListener {
-           mostrarPopupEstadoAutoconsumo(requireContext())
+            mostrarPopupEstadoAutoconsumoPersonalizado(requireContext())
         }
 
         binding.etEstado.ivPopupIcon.visibility = View.VISIBLE
@@ -58,21 +62,35 @@ class DetailsFragment : Fragment() {
 
     }
 
-    fun mostrarPopupEstadoAutoconsumo(context: Context) {
-        val builder = AlertDialog.Builder(context, R.style.CustomAlertDialogStyle)
-            .setTitle("Estado solicitud autoconsumo")
-            .setMessage("El tiempo estimado de activación de tu\nautoconsumo es de 1 a 2 meses, éste\nvariará en función de tu comunidad\nautónoma y distribuidora")
-            .setPositiveButton("Aceptar") { dialog, _ ->
-                dialog.dismiss() // Cierra el diálogo al hacer clic en "Aceptar"
-                // Aquí puedes añadir cualquier otra acción que quieras realizar al aceptar
-            }
-            .setCancelable(false) // Evita que el diálogo se cierre al tocar fuera de él o al pulsar el botón de retroceso
+    fun mostrarPopupEstadoAutoconsumoPersonalizado(context: Context) {
+        val view = LayoutInflater.from(context).inflate(R.layout.custom_alert_dialog, null)
+
+        val builder = AlertDialog.Builder(context)
+            .setView(view)
+            .setCancelable(false) // O true si quieres que se pueda cancelar tocando fuera
 
         val alertDialog = builder.create()
         alertDialog.show()
 
-        // Opcional: Personalizar el color del botón "Aceptar" (requiere acceder al botón después de mostrarlo)
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(context.getColor(R.color.green))
+        // Acceder a las vistas dentro de tu layout personalizado
+        val tituloTextView =
+            view.findViewById<TextView>(R.id.tvPopupTitle) // Asegúrate de que este ID exista en tu layout
+        val mensajeTextView =
+            view.findViewById<TextView>(R.id.tvPopupMessage) // Asegúrate de que este ID exista en tu layout
+        val botonAceptar =
+            view.findViewById<Button>(R.id.btnPopupAccept) // El primer botón en el layout
+
+        // Opcional: Configurar el texto dinámicamente si es necesario
+        tituloTextView.text = "Estado solicitud autoconsumo"
+        mensajeTextView.text =
+            "El tiempo estimado de activación de tu autoconsumo es de 1 a 2 meses, éste variará en función de tu comunidad autónoma y distribuidora"
+
+        // Manejar el clic del botón "Aceptar"
+        botonAceptar.setOnClickListener {
+            alertDialog.dismiss()
+            // Aquí puedes añadir cualquier otra acción que quieras realizar al aceptar
+        }
     }
+
 
 }

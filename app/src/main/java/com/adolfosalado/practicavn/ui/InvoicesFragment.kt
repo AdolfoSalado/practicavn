@@ -18,12 +18,15 @@ import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.viewmodels.InvoiceViewModel
 import com.adolfosalado.practicavn.databinding.FragmentFacturasBinding
 import com.adolfosalado.practicavn.ui.adapters.InvoiceAdapter
+import kotlin.getValue
 
 class InvoicesFragment : Fragment() {
     private lateinit var binding: FragmentFacturasBinding
     private lateinit var adapter: InvoiceAdapter
+    private var getFilter: InvoiceFilter = InvoiceFilter()
     private val viewModel: InvoiceViewModel by activityViewModels() // ViewModel compartido
 
+    
     private val filterLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -33,15 +36,19 @@ class InvoicesFragment : Fragment() {
             filter?.let {
                 Log.d("FRAGMENT_FILTER", "Aplicando filtro: $filter")
                 viewModel.applyFilter(it)
+                getFilter = it
             }
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFacturasBinding.inflate(inflater, container, false)
+
+
         return binding.root
     }
 
@@ -61,7 +68,6 @@ class InvoicesFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-
 
         viewModel.invoicesLiveData.observe(viewLifecycleOwner) { invoices ->
             Log.d("OBSERVED_INVOICES", "Facturas recibidas en el Fragment: ${invoices.size}")
@@ -95,8 +101,9 @@ class InvoicesFragment : Fragment() {
             when (it.itemId) {
                 R.id.action_menu -> {
                     val intent = Intent(requireContext(), InvoicesFilter::class.java)
-                    viewModel.filterLiveData.value?.let {
-                        intent.putExtra("filter", it)
+
+                    if (getFilter != null) {
+                        intent.putExtra("filter", getFilter)
                     }
                     filterLauncher.launch(intent)
                     true

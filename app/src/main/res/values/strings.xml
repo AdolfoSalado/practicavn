@@ -18,4 +18,7 @@
     <string name="energia">Energía</string>
     <string name="detalles">Detalles</string>
     <string name="pendiente_de_pago">Pendiente de pago</string>
+    <string name="filter_invoices">Filtrar facturas</string>
+    <string name="range_amount">%1$d € - %2$d €</string>
+    <string name="date">día/mes/año</string>
 </resources>

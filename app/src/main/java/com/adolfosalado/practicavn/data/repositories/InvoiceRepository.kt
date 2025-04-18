@@ -7,7 +7,7 @@ import com.adolfosalado.practicavn.data.models.InvoiceFilter
 
 class InvoiceRepository(private val invoiceDao: InvoiceDao) {
 
-    suspend fun getInvoicesFiltered(
+    /*suspend fun getInvoicesFiltered(
         filter: InvoiceFilter
     ): List<InvoiceEntity> {
         return invoiceDao.getFilteredInvoices(
@@ -16,6 +16,6 @@ class InvoiceRepository(private val invoiceDao: InvoiceDao) {
             amount = filter.amount,
             statusList = filter.statusList
         )
-    }
+    }*/
 
 }

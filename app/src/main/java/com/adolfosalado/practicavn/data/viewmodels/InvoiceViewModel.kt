@@ -111,4 +111,8 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 }
         )
     }
+
+    fun setFilter(filter: InvoiceFilter) {
+        _filterLiveData.value = filter
+    }
 }

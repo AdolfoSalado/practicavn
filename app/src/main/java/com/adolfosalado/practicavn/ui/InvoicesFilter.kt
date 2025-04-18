@@ -3,9 +3,9 @@ package com.adolfosalado.practicavn.ui
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
@@ -18,186 +18,159 @@ import java.util.*
 
 class InvoicesFilter : AppCompatActivity() {
     private lateinit var binding: ActivityInvoicesFilterBinding
-    private val filterViewModel: InvoiceFilterViewModel by viewModels()
-
-    private var dateFromMillis: Long? = null
-    private var dateToMillis: Long? = null
-
-    private val statusCheckboxes = mutableListOf<CheckBox>()
+    private val viewModel: InvoiceFilterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInvoicesFilterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val existingFilter = intent.getParcelableExtra<InvoiceFilter>("filter")
+        existingFilter?.let {
+            viewModel.setFilter(it)
+        }
+
         setupListeners()
-        setToolbarTitle(binding.filterToolbar)
-        modifyToolbar()
-
-        // Observando el LiveData del filtro para mantener los valores cuando regresamos a esta Activity
-        filterViewModel.filter.observe(this) { filter ->
-            filter?.let {
-                // Actualiza las fechas desde y hasta
-                dateFromMillis = it.dateFrom
-                dateToMillis = it.dateTo
-
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
-                // Si la fecha de "Desde" no es nula, actualiza el campo correspondiente
-                it.dateFrom?.let { millis ->
-                    binding.inputFechaDesde.setText(dateFormat.format(Date(millis)))
-                }
-
-                // Si la fecha de "Hasta" no es nula, actualiza el campo correspondiente
-                it.dateTo?.let { millis ->
-                    binding.inputFechaHasta.setText(dateFormat.format(Date(millis)))
-                }
-
-                // Actualiza el valor del slider (importe)
-                binding.sliderImporte.value = it.amount?.toFloat() ?: 0f
-                binding.textRangoImporte.text =
-                    "${binding.sliderImporte.value.toInt()} € - ${binding.sliderImporte.valueTo.toInt()} €"
-
-                // Marca los checkboxes correspondientes de los estados
-                binding.layoutEstados.children.forEach { checkbox ->
-                    if (checkbox is CheckBox) {
-                        checkbox.isChecked = it.statusList.contains(checkbox.text.toString())
-                    }
-                }
-            } ?: run {
-                // Si 'filter' es nulo, puedes proporcionar valores por defecto o mostrar un mensaje de error
-                Log.e("InvoicesFilter", "El filtro está vacío o es nulo")
-            }
-        }
-
-        // Botón de aplicar filtros
-        binding.btnAplicarFiltros.setOnClickListener {
-
-            val selectedAmount = binding.sliderImporte.value.toDouble()
-
-            val selectedStatuses = statusCheckboxes
-                .filter { it.isChecked }
-                .map { it.text.toString() }
-
-            val filter = InvoiceFilter(
-                dateFrom = dateFromMillis,
-                dateTo = dateToMillis,
-                amount = if (selectedAmount > 0) selectedAmount else null,
-                statusList = selectedStatuses
-            )
-            val resultIntent = Intent()
-            resultIntent.putExtra("filter", filter)
-            setResult(RESULT_OK, resultIntent)
-            finish()
-        }
-
-        binding.btnDeleteFilters?.setOnClickListener {
-
-            binding.inputFechaDesde.setText("")
-            binding.inputFechaHasta.setText("")
-            binding.sliderImporte.value = 0f
-            binding.layoutEstados.children.forEach { checkbox ->
-                if (checkbox is CheckBox) {
-                    checkbox.isChecked = false
-                }
-            }
-        }
+        setupToolbar()
+        observeViewModel()
     }
 
     private fun setupListeners() {
         binding.inputFechaDesde.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            DatePickerDialog(
-                this,
-                { _, year, month, day ->
-                    val date = Calendar.getInstance()
-                    date.set(year, month, day, 23, 59, 59)
-                    dateFromMillis = date.timeInMillis
-                    val formattedDate = formatDateToString(dateFromMillis) // Convertir a String
-                    binding.inputFechaDesde.setText(formattedDate) // Mostrar en el UI
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            showDatePickerDialog { year, month, day ->
+                val calendar = Calendar.getInstance().apply {
+                    set(year, month, day, 0, 0, 0)
+                }
+                viewModel.setDateFrom(calendar.timeInMillis)
+            }
         }
 
         binding.inputFechaHasta.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            DatePickerDialog(
-                this,
-                { _, year, month, day ->
-                    val date = Calendar.getInstance()
-                    date.set(year, month, day, 23, 59, 59)
-                    dateToMillis = date.timeInMillis
-                    val formattedDate = formatDateToString(dateToMillis)
-                    binding.inputFechaHasta.setText(formattedDate)
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
-
-        // Estados dinámicos
-        filterViewModel.statusList.observe(this) { statuses ->
-            binding.layoutEstados.removeAllViews()
-            statusCheckboxes.clear()
-
-            statuses.forEach { status ->
-                val checkbox = CheckBox(this).apply {
-                    text = status
+            showDatePickerDialog { year, month, day ->
+                val calendar = Calendar.getInstance().apply {
+                    set(year, month, day, 23, 59, 59)
                 }
-                statusCheckboxes.add(checkbox)
-                binding.layoutEstados.addView(checkbox)
+                viewModel.setDateTo(calendar.timeInMillis)
             }
         }
 
-        filterViewModel.amountRange.observe(this) { maxAmount ->
-            binding.sliderImporte.valueTo = maxAmount.toFloat() // Ajusta el valor máximo
-            binding.textRangoImporte.text =
-                "${binding.sliderImporte.value.toInt()} € - ${binding.sliderImporte.valueTo.toInt()} €"
+        binding.sliderImporte.addOnChangeListener { slider, value, fromUser ->
+            viewModel.setAmountSelected(value.toDouble())
+            binding.textRangoImporte.text = "${value.toInt()} €"
         }
 
-        filterViewModel.amountSelected.observe(this) { amount ->
-            binding.textRangoImporte.text = amount.toString()
+        binding.btnAplicarFiltros.setOnClickListener {
+            val resultIntent = Intent().apply {
+                putExtra("filter", viewModel.filter.value)
+            }
+            setResult(RESULT_OK, resultIntent)
+            finish()
+        }
+
+        binding.btnDeleteFilters.setOnClickListener {
+            viewModel.setFilter(InvoiceFilter())
         }
     }
 
+    private fun observeViewModel() {
+        viewModel.maxAmount.observe(this) { max ->
+            binding.sliderImporte.valueFrom = 0f
+            binding.sliderImporte.valueTo = max.toFloat()
+            viewModel.amount.value?.let {
+                if (it <= max) {
+                    binding.sliderImporte.value = it.toFloat()
+                }
+            }
+            binding.textRangoImporte.text = getString(R.string.range_amount, 0, max.toInt())
+        }
 
-    // Función para convertir Long (fecha en milisegundos) a String con formato dd/MM/yyyy
-    private fun formatDateToString(dateInMillis: Long?): String? {
-        if (dateInMillis == null) return null
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val date = Date(dateInMillis)
-        return sdf.format(date)
+        viewModel.dateFrom.observe(this) { dateMillis ->
+            binding.inputFechaDesde.setText(formatDateToString(dateMillis))
+        }
+
+        viewModel.dateTo.observe(this) { dateMillis ->
+            binding.inputFechaHasta.setText(formatDateToString(dateMillis))
+        }
+
+        viewModel.amount.observe(this) { amount ->
+            if (amount <= binding.sliderImporte.valueTo) {
+                binding.sliderImporte.value = amount.toFloat()
+                binding.textRangoImporte.text = "${amount.toInt()} €"
+            }
+        }
+
+        viewModel.statusList.observe(this) { statuses ->
+            binding.layoutEstados.removeAllViews()
+            statuses.forEach { status ->
+                val checkBox = CheckBox(this).apply {
+                    text = status
+                    isChecked = viewModel.filter.value?.statusList?.contains(status) == true
+                    setOnCheckedChangeListener { _, isChecked ->
+                        val currentStatuses =
+                            viewModel.statusesSelected.value.orEmpty().toMutableList()
+                        if (isChecked) {
+                            currentStatuses.add(text.toString())
+                        } else {
+                            currentStatuses.remove(text.toString())
+                        }
+                        viewModel.setStatusesSelected(currentStatuses)
+                    }
+                }
+                binding.layoutEstados.addView(checkBox)
+            }
+        }
+
+        viewModel.statusesSelected.observe(this) { selectedStatuses ->
+            binding.layoutEstados.children
+                .filterIsInstance<CheckBox>()
+                .forEach { it.isChecked = selectedStatuses.contains(it.text.toString()) }
+        }
+
+        viewModel.filter.observe(this) { filter ->
+            // Este observador asegura que si el filtro se establece externamente (e.g., al recibir un filtro existente),
+            // la UI se actualice completamente. Los observadores individuales de dateFrom, dateTo, amount y statusesSelected
+            // también contribuyen a mantener la UI sincronizada.
+        }
     }
 
-    private fun setToolbarTitle(toolbar: androidx.appcompat.widget.Toolbar) {
-        val title = toolbar.findViewById<android.widget.TextView>(R.id.tvTittle)
-        title.text = "Filtrar facturas"
+    private fun setupToolbar() {
+        setToolbarTitle(binding.filterToolbar, getString(R.string.filter_invoices))
 
-    }
-
-    private fun modifyToolbar() {
-        val btnBack = binding.filterToolbar.findViewById<android.widget.LinearLayout>(R.id.llBack)
+        val btnBack = binding.filterToolbar.findViewById<View>(R.id.llBack)
         btnBack.visibility = View.INVISIBLE
 
         binding.filterToolbar.inflateMenu(R.menu.filter_invoice_menu)
-
-        val item = binding.filterToolbar.menu.findItem(R.id.action_menu)
-        item.icon = resources.getDrawable(R.drawable.close_icon)
-
-        binding.filterToolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_menu -> {
-                    finish()
-                    true
-                }
-            }
-            false
+        binding.filterToolbar.menu.findItem(R.id.action_menu).isVisible = true
+        binding.filterToolbar.menu.findItem(R.id.action_menu).setIcon(R.drawable.close_icon)
+        binding.filterToolbar.menu.findItem(R.id.action_menu).setOnMenuItemClickListener {
+            finish()
+            true
         }
     }
+
+    private fun showDatePickerDialog(onDateSet: (year: Int, month: Int, day: Int) -> Unit) {
+        val calendar = Calendar.getInstance()
+        DatePickerDialog(
+            this,
+            { _, year, month, day -> onDateSet(year, month, day) },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun formatDateToString(dateMillis: Long?): String {
+        return dateMillis?.let {
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            sdf.format(Date(it))
+        } ?: ""
+    }
+
+    fun AppCompatActivity.setToolbarTitle(
+        toolbar: androidx.appcompat.widget.Toolbar,
+        title: String
+    ) {
+        val titleTextView = toolbar.findViewById<TextView>(R.id.tvTittle)
+        titleTextView?.text = title
+    }
 }
-
-

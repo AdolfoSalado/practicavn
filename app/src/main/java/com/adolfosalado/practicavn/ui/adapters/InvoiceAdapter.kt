@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.data.models.Invoice
 import com.adolfosalado.practicavn.databinding.InvoiceItemBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class InvoiceAdapter(private var invoices: List<Invoice>) :
     RecyclerView.Adapter<InvoiceAdapter.ViewHolder>() {
@@ -14,9 +17,13 @@ class InvoiceAdapter(private var invoices: List<Invoice>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(invoice: Invoice) {
-            binding.tvDate.text = invoice.date
             binding.tvAmount.text = invoice.amount.toString() + " €"
             binding.tvStatus.text = invoice.status
+
+
+            val formatoDeseado = SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
+            val fechaFormateada = formatoDeseado.format(Date(invoice.date))
+            binding.tvDate.text = fechaFormateada
 
             // Cambiar el color del texto, y la visibilidad, de "status" según el estado
             if (invoice.status == this.itemView.context.getString(R.string.pendiente_de_pago)) {

@@ -7,7 +7,7 @@ data class InvoiceFilter(
     val dateFrom: Long? = null,
     val dateTo: Long? = null,
     val amount: Double? = null,
-    val statusList: List<String> = emptyList()
+    val statusList: List<String>? = emptyList(),
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Long::class.java.classLoader) as? Long,
@@ -21,6 +21,7 @@ data class InvoiceFilter(
         parcel.writeValue(dateTo)
         parcel.writeValue(amount)
         parcel.writeStringList(statusList)
+
     }
 
     override fun describeContents(): Int = 0
@@ -34,4 +35,5 @@ data class InvoiceFilter(
             return arrayOfNulls(size)
         }
     }
+
 }

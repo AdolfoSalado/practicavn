@@ -10,4 +10,6 @@
     <string name="mi_instalacion">Mi instalación</string>
     <string name="energia">Energía</string>
     <string name="detalles">Detalles</string>
+    <string name="range_amount">%1$.2f € - %2$.2f €</string>
+
 </resources>

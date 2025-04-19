@@ -5,6 +5,15 @@
     android:orientation="vertical"
     tools:context=".ui.DetailsFragment">
 
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+
     <include
         android:id="@+id/etCau"
         layout="@layout/custom_edit_text" />

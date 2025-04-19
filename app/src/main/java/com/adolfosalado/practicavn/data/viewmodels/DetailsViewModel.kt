@@ -16,7 +16,12 @@ class DetailsViewModel : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
+
     fun getDetails() {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 val result = detailsApi.getSmartSolarDetails().body().let {
@@ -29,8 +34,10 @@ class DetailsViewModel : ViewModel() {
                     )
                 }
                 _details.postValue(result)
+                _isLoading.value = false
             } catch (e: Exception) {
                 _error.postValue("Error: ${e.message}")
+                _isLoading.value = false
 
             }
         }

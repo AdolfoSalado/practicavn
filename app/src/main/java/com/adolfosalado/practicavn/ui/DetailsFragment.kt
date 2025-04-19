@@ -32,15 +32,7 @@ class DetailsFragment : Fragment() {
         binding = FragmentDetailsBinding.inflate(inflater, container, false)
 
         setEditTextTitle()
-
-        detailsViewModel.details.observe(viewLifecycleOwner) { detail ->
-            binding.etCau.etCustom.setText(detail.cau)
-            binding.etEstado.etCustom.setText(detail.estadoAlta)
-            binding.etTipo.etCustom.setText(detail.tipoAutoconsumo)
-            binding.etCompensacion.etCustom.setText(detail.compensacion)
-            binding.etPotencia.etCustom.setText(detail.potencia)
-
-        }
+        observeViewModel()
 
         binding.etEstado.ivPopupIcon.setOnClickListener {
             mostrarPopupEstadoAutoconsumoPersonalizado(requireContext())
@@ -62,33 +54,63 @@ class DetailsFragment : Fragment() {
 
     }
 
+    private fun observeViewModel() {
+        detailsViewModel.details.observe(viewLifecycleOwner) { detail ->
+            binding.etCau.etCustom.setText(detail.cau)
+            binding.etEstado.etCustom.setText(detail.estadoAlta)
+            binding.etTipo.etCustom.setText(detail.tipoAutoconsumo)
+            binding.etCompensacion.etCustom.setText(detail.compensacion)
+            binding.etPotencia.etCustom.setText(detail.potencia)
+
+            // Ocultar ProgressBar y mostrar los EditTexts cuando los datos están disponibles
+            binding.loadingProgressBar.visibility = View.GONE
+            binding.etCau.root.visibility = View.VISIBLE
+            binding.etEstado.root.visibility = View.VISIBLE
+            binding.etTipo.root.visibility = View.VISIBLE
+            binding.etCompensacion.root.visibility = View.VISIBLE
+            binding.etPotencia.root.visibility = View.VISIBLE
+        }
+
+        detailsViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            // También podrías controlar la visibilidad de los EditTexts aquí si lo prefieres
+            binding.etCau.root.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.etEstado.root.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.etTipo.root.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.etCompensacion.root.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.etPotencia.root.visibility = if (isLoading) View.GONE else View.VISIBLE
+        }
+
+        detailsViewModel.error.observe(viewLifecycleOwner) { error ->
+            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+            binding.loadingProgressBar.visibility =
+                View.GONE // Ocultar la ProgressBar en caso de error
+        }
+    }
+
     fun mostrarPopupEstadoAutoconsumoPersonalizado(context: Context) {
         val view = LayoutInflater.from(context).inflate(R.layout.custom_alert_dialog, null)
 
         val builder = AlertDialog.Builder(context)
             .setView(view)
-            .setCancelable(false) // O true si quieres que se pueda cancelar tocando fuera
+            .setCancelable(false)
 
         val alertDialog = builder.create()
         alertDialog.show()
 
-        // Acceder a las vistas dentro de tu layout personalizado
         val tituloTextView =
-            view.findViewById<TextView>(R.id.tvPopupTitle) // Asegúrate de que este ID exista en tu layout
+            view.findViewById<TextView>(R.id.tvPopupTitle)
         val mensajeTextView =
-            view.findViewById<TextView>(R.id.tvPopupMessage) // Asegúrate de que este ID exista en tu layout
+            view.findViewById<TextView>(R.id.tvPopupMessage)
         val botonAceptar =
-            view.findViewById<Button>(R.id.btnPopupAccept) // El primer botón en el layout
+            view.findViewById<Button>(R.id.btnPopupAccept)
 
-        // Opcional: Configurar el texto dinámicamente si es necesario
         tituloTextView.text = "Estado solicitud autoconsumo"
         mensajeTextView.text =
             "El tiempo estimado de activación de tu autoconsumo es de 1 a 2 meses, éste variará en función de tu comunidad autónoma y distribuidora"
 
-        // Manejar el clic del botón "Aceptar"
         botonAceptar.setOnClickListener {
             alertDialog.dismiss()
-            // Aquí puedes añadir cualquier otra acción que quieras realizar al aceptar
         }
     }
 

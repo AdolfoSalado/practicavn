@@ -15,6 +15,7 @@ import com.adolfosalado.practicavn.data.viewmodels.InvoiceFilterViewModel
 import com.adolfosalado.practicavn.databinding.ActivityInvoicesFilterBinding
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Locale
 
 class InvoicesFilter : AppCompatActivity() {
     private lateinit var binding: ActivityInvoicesFilterBinding
@@ -56,7 +57,7 @@ class InvoicesFilter : AppCompatActivity() {
 
         binding.sliderImporte.addOnChangeListener { slider, value, fromUser ->
             viewModel.setAmountSelected(value.toDouble())
-            binding.textRangoImporte.text = "${value.toInt()} €"
+            binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", value)
         }
 
         binding.btnAplicarFiltros.setOnClickListener {
@@ -78,12 +79,14 @@ class InvoicesFilter : AppCompatActivity() {
         viewModel.maxAmount.observe(this) { max ->
             binding.sliderImporte.valueFrom = 0f
             binding.sliderImporte.valueTo = max.toFloat()
+            binding.textViewMaxValue.text = String.format(Locale.getDefault(), "%.2f €", max)
+
             viewModel.amount.value?.let {
                 if (it <= max) {
                     binding.sliderImporte.value = it.toFloat()
                 }
             }
-            binding.textRangoImporte.text = getString(R.string.range_amount, 0, max.toInt())
+            binding.textRangoImporte.text = getString(R.string.range_amount, 0.0, max)
         }
 
         viewModel.dateFrom.observe(this) { dateMillis ->
@@ -97,7 +100,7 @@ class InvoicesFilter : AppCompatActivity() {
         viewModel.amount.observe(this) { amount ->
             if (amount <= binding.sliderImporte.valueTo) {
                 binding.sliderImporte.value = amount.toFloat()
-                binding.textRangoImporte.text = "${amount.toInt()} €"
+                binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", amount)
             }
         }
 

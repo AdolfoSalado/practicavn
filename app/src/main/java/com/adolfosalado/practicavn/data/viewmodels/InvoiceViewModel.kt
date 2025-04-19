@@ -30,10 +30,8 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     private val _filterLiveData = MutableLiveData<InvoiceFilter>()
     val filterLiveData: MutableLiveData<InvoiceFilter> get() = _filterLiveData
 
-
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> = _isLoading
-
 
     init {
         checkForApiChangesAndUpdateRoom()

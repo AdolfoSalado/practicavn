@@ -4,7 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#FFC4C4C4</color>
     <color name="green">#95BB4E</color>
-    <color name="red">#FFD32F2F</color>
+    <color name="red">#f67878</color>
     <color name="bottom_navigation_ripple_color">@color/green</color>
+    <color name="background_date">#e8e8e8</color>
 </resources>
 

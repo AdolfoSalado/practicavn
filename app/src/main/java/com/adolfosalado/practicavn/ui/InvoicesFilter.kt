@@ -70,6 +70,8 @@ class InvoicesFilter : AppCompatActivity() {
         binding.btnDeleteFilters.setOnClickListener {
             viewModel.setFilter(InvoiceFilter())
         }
+
+        binding.sliderImporte.setCustomThumbDrawable(R.drawable.thumb)
     }
 
     private fun observeViewModel() {
@@ -105,6 +107,8 @@ class InvoicesFilter : AppCompatActivity() {
                 val checkBox = CheckBox(this).apply {
                     text = status
                     isChecked = viewModel.filter.value?.statusList?.contains(status) == true
+                    buttonTintList = getColorStateList(R.color.checkbox_tint_green)
+
                     setOnCheckedChangeListener { _, isChecked ->
                         val currentStatuses =
                             viewModel.statusesSelected.value.orEmpty().toMutableList()
@@ -152,6 +156,7 @@ class InvoicesFilter : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         DatePickerDialog(
             this,
+            R.style.GreenDatePickerDialog,
             { _, year, month, day -> onDateSet(year, month, day) },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),

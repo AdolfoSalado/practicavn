@@ -26,7 +26,7 @@ class InvoicesFragment : Fragment() {
     private var getFilter: InvoiceFilter = InvoiceFilter()
     private val viewModel: InvoiceViewModel by activityViewModels() // ViewModel compartido
 
-    
+
     private val filterLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -41,13 +41,11 @@ class InvoicesFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFacturasBinding.inflate(inflater, container, false)
-
 
         return binding.root
     }
@@ -64,17 +62,20 @@ class InvoicesFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.rvFacturas.layoutManager = LinearLayoutManager(requireContext())
         adapter = InvoiceAdapter(emptyList())
+
         binding.rvFacturas.adapter = adapter
     }
 
     private fun observeViewModel() {
-
         viewModel.invoicesLiveData.observe(viewLifecycleOwner) { invoices ->
-            Log.d("OBSERVED_INVOICES", "Facturas recibidas en el Fragment: ${invoices.size}")
-            invoices.forEach {
-                Log.d("OBSERVED_INVOICE", "Factura: $it")
-            }
             updateRecyclerView(invoices)
+            if (invoices.isEmpty()) {
+                binding.rvFacturas.visibility = View.GONE
+                binding.emptyTextView.visibility = View.VISIBLE
+            } else {
+                binding.rvFacturas.visibility = View.VISIBLE
+                binding.emptyTextView.visibility = View.GONE
+            }
         }
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
@@ -112,6 +113,13 @@ class InvoicesFragment : Fragment() {
                 else -> false
             }
         }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.rvFacturas.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.emptyTextView.visibility = View.GONE
+        }
+
     }
 
     private fun setToolbarTitle(toolbar: androidx.appcompat.widget.Toolbar) {

@@ -30,11 +30,17 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     private val _filterLiveData = MutableLiveData<InvoiceFilter>()
     val filterLiveData: MutableLiveData<InvoiceFilter> get() = _filterLiveData
 
+
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
+
     init {
         checkForApiChangesAndUpdateRoom()
     }
 
     private fun checkForApiChangesAndUpdateRoom() {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 val apiResponse = api.getInvoices()
@@ -60,16 +66,19 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 )
 
                 _invoicesLiveData.postValue(sortedInvoices)
-
+                _isLoading.value = false // Indica que la carga ha finalizado
 
             } catch (e: Exception) {
                 _error.postValue("Error al verificar cambios: ${e.message}")
                 Log.e("API_ERROR", "Error al consultar la API: ${e.message}")
+                _isLoading.value = false // Indica que la carga ha finalizado
+
             }
         }
     }
 
     fun applyFilter(filter: InvoiceFilter) {
+        _isLoading.value = true // Indica que la carga del filtro ha comenzado
         viewModelScope.launch {
             try {
                 val filteredInvoices = invoiceDao.getFilteredInvoices(
@@ -83,8 +92,11 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 val mappedInvoices = filteredInvoices.map { mapEntityToInvoice(it) }
 
                 _invoicesLiveData.postValue(sortInvoices(mappedInvoices))
+                _isLoading.value = false // Indica que la carga del filtro ha comenzado
+
             } catch (e: Exception) {
                 _error.postValue("Error al aplicar filtro: ${e.message}")
+                _isLoading.value = false // Indica que la carga del filtro ha comenzado
             }
         }
     }

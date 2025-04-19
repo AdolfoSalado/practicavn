@@ -19,8 +19,10 @@
         android:id="@+id/llAutoconsumo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFirstDescription">
@@ -28,21 +30,22 @@
         <TextView
             android:id="@+id/tvSecondDescription"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="@string/autoconsumo" />
 
         <TextView
             android:id="@+id/tvNumericValue"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:hint="@string/numeric_value" />
+            android:hint="@string/numeric_value"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/ivGraph"
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="250dp"
         android:contentDescription="@string/energy_graph"
         android:src="@drawable/grafico1"
         app:layout_constraintEnd_toEndOf="parent"

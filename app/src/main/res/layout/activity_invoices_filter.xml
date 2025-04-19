@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="Desde"
+                    android:text="Desde:"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
@@ -64,8 +64,11 @@
                         android:id="@+id/inputFechaDesde"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_border"
                         android:focusable="false"
-                        android:hint="@string/date" />
+                        android:hint="@string/date"
+                        android:textStyle="bold
+" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -80,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="Hasta"
+                    android:text="Hasta:"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
@@ -92,8 +95,11 @@
                         android:id="@+id/inputFechaHasta"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_border"
                         android:focusable="false"
-                        android:hint="@string/date" />
+                        android:hint="@string/date"
+                        android:textStyle="bold
+" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -119,17 +125,18 @@
             android:textColor="@color/green"
             android:textSize="14sp" />
 
+        <!-- Por estado -->
         <com.google.android.material.slider.Slider
             android:id="@+id/sliderImporte"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:haloColor="@color/green"
+            app:haloRadius="0dp"
             app:thumbColor="@color/green"
-            app:thumbRadius="4dp"
+            app:thumbRadius="40dp"
             app:trackColor="@color/green" />
 
-        <!-- Por estado -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

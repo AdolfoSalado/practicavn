@@ -57,8 +57,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-
-
     implementation("androidx.room:room-runtime:$roomVersion")
 
     // Dependencias opcionales
@@ -85,7 +83,5 @@ dependencies {
     // NAVIGATION
     implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
     implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
-
-
 
 }

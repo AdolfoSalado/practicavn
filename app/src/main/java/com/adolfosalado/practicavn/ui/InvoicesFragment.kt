@@ -17,7 +17,9 @@ import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.viewmodels.InvoiceViewModel
 import com.adolfosalado.practicavn.databinding.FragmentFacturasBinding
 import com.adolfosalado.practicavn.ui.adapters.InvoiceAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class InvoicesFragment : Fragment() {
     private lateinit var binding: FragmentFacturasBinding
     private lateinit var adapter: InvoiceAdapter

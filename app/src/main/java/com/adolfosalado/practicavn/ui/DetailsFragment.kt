@@ -19,7 +19,9 @@ import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.data.viewmodels.DetailsViewModel
 import com.adolfosalado.practicavn.databinding.CustomEditTextBinding
 import com.adolfosalado.practicavn.databinding.FragmentDetailsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding
     val detailsViewModel: DetailsViewModel by viewModels()

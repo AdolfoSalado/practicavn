@@ -4,8 +4,8 @@
         <shape android:shape="oval">
             <solid android:color="@color/green" /> <!-- Color del círculo -->
             <size
-                android:width="20dp"
-                android:height="20dp" /> <!-- Define el tamaño -->
+                android:width="10dp"
+                android:height="10dp" /> <!-- Define el tamaño -->
         </shape>
     </item>
 </layer-list>

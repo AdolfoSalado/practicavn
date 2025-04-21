@@ -7,9 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.repository.InvoiceRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class InvoiceFilterViewModel(private val repository: InvoiceRepository) : ViewModel() {
+@HiltViewModel
+class InvoiceFilterViewModel @Inject constructor(private val repository: InvoiceRepository) :
+    ViewModel() {
 
     private val _dateFrom = MutableLiveData<Long?>()
     val dateFrom: LiveData<Long?> = _dateFrom

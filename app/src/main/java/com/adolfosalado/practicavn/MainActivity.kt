@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import com.adolfosalado.practicavn.databinding.ActivityMainBinding
 import com.adolfosalado.practicavn.ui.InvoicesFragment
 import com.adolfosalado.practicavn.ui.SmartSolarFragment
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

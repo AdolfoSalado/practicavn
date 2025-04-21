@@ -6,6 +6,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface DetailsService {
-    @GET("/getSmartSolarDetails")
+    @GET("getSmartSolarDetails")
     suspend fun getSmartSolarDetails(): Response<SmartSolarDetails>
 }

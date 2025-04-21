@@ -13,10 +13,12 @@ import com.adolfosalado.practicavn.R
 import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.viewmodels.InvoiceFilterViewModel
 import com.adolfosalado.practicavn.databinding.ActivityInvoicesFilterBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Locale
 
+@AndroidEntryPoint
 class InvoicesFilter : AppCompatActivity() {
     private lateinit var binding: ActivityInvoicesFilterBinding
     private val viewModel: InvoiceFilterViewModel by viewModels()
@@ -25,6 +27,7 @@ class InvoicesFilter : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityInvoicesFilterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setTheme(R.style.Theme_Practicavn)
 
         val existingFilter = intent.getParcelableExtra<InvoiceFilter>("filter")
         existingFilter?.let {

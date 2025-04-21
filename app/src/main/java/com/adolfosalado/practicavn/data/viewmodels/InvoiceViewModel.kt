@@ -10,11 +10,14 @@ import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.usecases.GetFilteredInvoicesUseCase
 import com.adolfosalado.practicavn.data.usecases.GetInvoicesUseCase
 import com.adolfosalado.practicavn.data.usecases.SyncInvoicesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
+import javax.inject.Inject
 
-class InvoiceViewModel(
+@HiltViewModel
+class InvoiceViewModel @Inject constructor(
     private val getInvoicesUseCase: GetInvoicesUseCase,
     private val getFilteredInvoicesUseCase: GetFilteredInvoicesUseCase,
     private val syncInvoicesUseCase: SyncInvoicesUseCase

@@ -6,9 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adolfosalado.practicavn.data.models.SmartSolarDetails
 import com.adolfosalado.practicavn.data.usecases.GetSmartSolarDetailsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailsViewModel(private val getSmartSolarDetailsUseCase: GetSmartSolarDetailsUseCase) : ViewModel() {
+@HiltViewModel
+class DetailsViewModel @Inject constructor(private val getSmartSolarDetailsUseCase: GetSmartSolarDetailsUseCase) :
+    ViewModel() {
 
     private val _details = MutableLiveData<SmartSolarDetails>()
     val details: LiveData<SmartSolarDetails> = _details
@@ -23,7 +27,7 @@ class DetailsViewModel(private val getSmartSolarDetailsUseCase: GetSmartSolarDet
         _isLoading.value = true
         viewModelScope.launch {
             val result = getSmartSolarDetailsUseCase()
-            if(result != null) {
+            if (result != null) {
                 _details.postValue(result)
             } else {
                 _error.postValue("Error: No se pudieron cargar los detalles")

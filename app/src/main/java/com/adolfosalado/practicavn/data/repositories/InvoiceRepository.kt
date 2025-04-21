@@ -8,17 +8,21 @@ import com.adolfosalado.practicavn.data.network.ApiService
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class InvoiceRepository(private val invoiceDao: InvoiceDao, private val apiService: ApiService) {
+open class InvoiceRepository(
+    private val invoiceDao: InvoiceDao,
+    private val apiService: ApiService
+) {
 
     suspend fun getAllInvoices(): List<InvoiceEntity> = invoiceDao.getAllInvoices()
 
-    suspend fun getFilteredInvoices(filter: InvoiceFilter): List<InvoiceEntity> = invoiceDao.getFilteredInvoices(
-        dateFrom = filter.dateFrom,
-        dateTo = filter.dateTo,
-        amount = filter.amount,
-        statusList = filter.statusList ?: emptyList(),
-        statusListSize = filter.statusList?.size ?: 0
-    )
+    suspend fun getFilteredInvoices(filter: InvoiceFilter): List<InvoiceEntity> =
+        invoiceDao.getFilteredInvoices(
+            dateFrom = filter.dateFrom,
+            dateTo = filter.dateTo,
+            amount = filter.amount,
+            statusList = filter.statusList ?: emptyList(),
+            statusListSize = filter.statusList?.size ?: 0
+        )
 
     suspend fun getInvoiceCount(): Int = invoiceDao.getInvoiceCount()
 
@@ -28,7 +32,8 @@ class InvoiceRepository(private val invoiceDao: InvoiceDao, private val apiServi
 
     suspend fun syncInvoices() {
         val apiResponse = apiService.getInvoices()
-        val apiNumberInvoices = apiResponse.numFacturas
+
+        val apiNumberInvoices = apiResponse.numFacturas?.toInt() ?: 0
         val roomNumberInvoices = invoiceDao.getInvoiceCount()
 
         if (apiNumberInvoices != roomNumberInvoices) {
@@ -36,6 +41,7 @@ class InvoiceRepository(private val invoiceDao: InvoiceDao, private val apiServi
             invoiceDao.insertInvoices(apiResponse.facturas.map { mapInvoiceToEntity(it) })
         }
     }
+
     suspend fun deleteAllInvoices() = invoiceDao.deleteAllInvoices()
     suspend fun insertInvoices(invoices: List<Invoice>) {
         invoiceDao.insertInvoices(invoices.map { mapInvoiceToEntity(it) })

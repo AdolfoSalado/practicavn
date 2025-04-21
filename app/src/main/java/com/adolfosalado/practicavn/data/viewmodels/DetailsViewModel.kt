@@ -14,8 +14,8 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(private val getSmartSolarDetailsUseCase: GetSmartSolarDetailsUseCase) :
     ViewModel() {
 
-    private val _details = MutableLiveData<SmartSolarDetails>()
-    val details: LiveData<SmartSolarDetails> = _details
+    private val _details = MutableLiveData<SmartSolarDetails?>()
+    val details: LiveData<SmartSolarDetails> = _details as LiveData<SmartSolarDetails>
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error

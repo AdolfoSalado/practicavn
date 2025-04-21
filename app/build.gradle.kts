@@ -55,12 +55,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0") // Usar la última versión estable
     implementation("androidx.activity:activity-ktx:1.8.2") // Usar la última versión estable
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
-    // *** Test ***
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5") // Usar la última versión estable
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1") // Usar la última versión estable
-
+    
     // *** Room ***
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion") // Extensiones Kotlin
@@ -86,4 +81,15 @@ dependencies {
     // *** Hilt ***
     implementation("com.google.dagger:hilt-android:2.48.1")
     ksp("com.google.dagger:hilt-android-compiler:2.48.1")
+
+
+// *** Test ***
+    testImplementation("junit:junit:4.13.2") // JUnit para pruebas unitarias
+    testImplementation("org.mockito:mockito-core:4.8.0") // Mockito para crear mocks
+    testImplementation("com.google.truth:truth:1.1.3") // Truth para aserciones
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3") // Coroutines test para probar coroutines
+    testImplementation("androidx.arch.core:core-testing:2.2.0") // testing de los componentes de Android
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")// Mockito con Kotlin
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

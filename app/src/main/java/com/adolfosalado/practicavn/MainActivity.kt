@@ -7,8 +7,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.adolfosalado.practicavn.databinding.ActivityMainBinding
-import ui.FacturasFragment
-import ui.SmartSolarFragment
+import com.adolfosalado.practicavn.ui.InvoicesFragment
+import com.adolfosalado.practicavn.ui.SmartSolarFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -20,17 +20,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        changeFragment(FacturasFragment())
+        changeFragment(InvoicesFragment())
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.tabFacturas -> changeFragment(FacturasFragment())
+                R.id.tabFacturas -> changeFragment(InvoicesFragment())
                 R.id.tabSmartSolar -> changeFragment(SmartSolarFragment())
                 else -> {}
             }
             true
         }
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

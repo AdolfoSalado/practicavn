@@ -4,4 +4,23 @@
     <string name="smart_solar">Smart Solar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="first_description">Aquí tienes los datos de tu instalación fotovoltaica en tiempo real.</string>
+    <string name="autoconsumo">Autoconsumo:</string>
+    <string name="numeric_value">92%</string>
+    <string name="energy_graph">Gráfico de energía</string>
+    <string name="back">Atrás</string>
+    <string name="consumo">Consumo</string>
+    <string name="amount">54,56 euros</string>
+    <string name="statusExample">Pendiente de pago</string>
+    <string name="dateExample">31 Ago 2020</string>
+    <string name="energy_text">Estamos trabajando en mejorar la App. Tus panales solares siguen produciendo, en breve podrás seguir viendo tu producción solar. Sentimos las molestias.</string>
+    <string name="mi_instalacion">Mi instalación</string>
+    <string name="energia">Energía</string>
+    <string name="detalles">Detalles</string>
+    <string name="pendiente_de_pago">Pendiente de pago</string>
+    <string name="filter_invoices">Filtrar facturas</string>
+    <string name="range_amount">%1$.2f € - %2$.2f €</string>
+    <string name="date">día/mes/año</string>
+    <string name="no_invoices_available">No hay facturas disponibles</string>"
+
 </resources>

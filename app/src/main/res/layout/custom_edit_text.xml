@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/tvTitleOfDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:text="Título del campo"
+        android:textColor="@color/grey"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/etCustom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Escribe aquí"
+        android:inputType="textMultiLine"
+        android:gravity="top|start"
+        android:paddingTop="25dp"
+        android:paddingEnd="40dp"
+        android:minLines="1"
+        android:maxLines="5" />
+
+    <ImageView
+        android:id="@+id/ivPopupIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@id/etCustom"
+        android:layout_alignEnd="@id/etCustom"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/popup"
+        android:visibility="invisible" />
+
+
+</RelativeLayout>

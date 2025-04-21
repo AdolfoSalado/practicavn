@@ -1,13 +1,37 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ui.DetailsFragment">
+    android:orientation="vertical"
+    tools:context=".ui.DetailsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
-</FrameLayout>
+
+    <include
+        android:id="@+id/etCau"
+        layout="@layout/custom_edit_text" />
+
+    <include
+        android:id="@+id/etEstado"
+        layout="@layout/custom_edit_text" />
+
+    <include
+        android:id="@+id/etTipo"
+        layout="@layout/custom_edit_text" />
+
+    <include
+        android:id="@+id/etCompensacion"
+        layout="@layout/custom_edit_text" />
+
+    <include
+        android:id="@+id/etPotencia"
+        layout="@layout/custom_edit_text" />
+
+</LinearLayout>

@@ -1,18 +1,19 @@
 package com.adolfosalado.practicavn.data.viewmodels
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.adolfosalado.practicavn.data.database.InvoiceDatabaseClient
 import com.adolfosalado.practicavn.data.models.InvoiceFilter
+import com.adolfosalado.practicavn.data.repository.InvoiceRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class InvoiceFilterViewModel(application: Application) : AndroidViewModel(application) {
-    private val database = InvoiceDatabaseClient.getDatabase(application)
-    private val invoiceDao = database.invoiceDao()
+@HiltViewModel
+class InvoiceFilterViewModel @Inject constructor(private val repository: InvoiceRepository) :
+    ViewModel() {
 
     private val _dateFrom = MutableLiveData<Long?>()
     val dateFrom: LiveData<Long?> = _dateFrom
@@ -43,13 +44,13 @@ class InvoiceFilterViewModel(application: Application) : AndroidViewModel(applic
 
     private fun loadMaxAmount() {
         viewModelScope.launch {
-            _maxAmount.postValue(invoiceDao.getImporteMax() ?: 100.0)
+            _maxAmount.postValue(repository.getImporteMax() ?: 100.0)
         }
     }
 
     private fun loadStatusList() {
         viewModelScope.launch {
-            _statusList.postValue(invoiceDao.getDistinctStatuses() ?: emptyList())
+            _statusList.postValue(repository.getDistinctStatuses() ?: emptyList())
         }
     }
 
@@ -86,5 +87,4 @@ class InvoiceFilterViewModel(application: Application) : AndroidViewModel(applic
         _filter.value = update(current)
         Log.d("FILTER_VIEWMODEL", "Filtro actualizado: ${_filter.value}")
     }
-
 }

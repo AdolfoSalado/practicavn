@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.adolfosalado.practicavn.data.database.entities.InvoiceEntity
-import com.adolfosalado.practicavn.data.models.Invoice
 
 @Dao
 interface InvoiceDao {
@@ -14,7 +13,7 @@ interface InvoiceDao {
     @Insert
     suspend fun insertInvoices(invoices: List<InvoiceEntity>)
 
-    @Query("SELECT COUNT(*) FROM invoice_table")
+    @Query("SELECT COALESCE(COUNT(*), 0) FROM invoice_table")
     suspend fun getInvoiceCount(): Int
 
     @Query("DELETE FROM invoice_table")
@@ -35,18 +34,20 @@ interface InvoiceDao {
     @Query("SELECT DISTINCT status FROM invoice_table")
     suspend fun getDistinctStatuses(): List<String>
 
-    @Query("""
+    @Query(
+        """
     SELECT * FROM invoice_table
     WHERE (:dateFrom IS NULL OR date >= :dateFrom)
     AND (:dateTo IS NULL OR date <= :dateTo)
     AND (:amount IS NULL OR amount BETWEEN 0 AND :amount)
     AND (:statusListSize = 0 OR status IN (:statusList))
-""")
+"""
+    )
     suspend fun getFilteredInvoices(
         dateFrom: Long? = null,
         dateTo: Long? = null,
         amount: Double? = null,
-        statusList: List<String> = emptyList(),
+        statusList: List<String>? = emptyList(),
         statusListSize: Int = 0
     ): List<InvoiceEntity>
 

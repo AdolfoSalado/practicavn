@@ -152,14 +152,18 @@
         <!-- Por estado -->
         <com.google.android.material.slider.Slider
             android:id="@+id/sliderImporte"
+            style="@style/MySliderStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:haloColor="@color/green"
             app:haloRadius="0dp"
             app:thumbColor="@color/green"
-            app:thumbRadius="40dp"
-            app:trackColor="@color/green" />
+            app:thumbRadius="10dp"
+            app:tickColor="@color/green"
+            app:trackColor="@color/green"
+            app:trackColorActive="@color/green"
+            app:trackColorInactive="@color/green" />
 
 
         <TextView

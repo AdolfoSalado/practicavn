@@ -1,17 +1,18 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.adolfosalado.practicavn"
-    compileSdk = 35
+    compileSdk = 34 // Usar la última versión estable del SDK (ej. 34)
 
     defaultConfig {
         applicationId = "com.adolfosalado.practicavn"
-        minSdk = 24
-        targetSdk = 35
+        minSdk = 24 // Usar un minSdk que soporte la mayoría de dispositivos (ej. 24)
+        targetSdk = 34 // Usar la última versión estable del SDK (ej. 34)
         versionCode = 1
         versionName = "1.0"
 
@@ -28,11 +29,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17 // Usar Java 17
+        targetCompatibility = JavaVersion.VERSION_17 // Usar Java 17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17" // Usar Java 17
     }
     buildFeatures {
         viewBinding = true
@@ -40,48 +41,55 @@ android {
 }
 
 dependencies {
+    // *** Versiones de Librerías ***
+    val roomVersion = "2.6.1" // Usar la última versión estable de Room
+    val retrofitVersion = "2.9.0" // Usar la última versión estable de Retrofit
+    val lifecycleVersion = "2.7.0" // Usar la última versión estable de Lifecycle
+    val coroutinesVersion = "1.7.3" // Usar la última versión estable de Coroutines
+    val navigationVersion = "2.7.6" // Usar la última versión estable de Navigation
+    val okhttp3Version = "4.12.0" // Usar la última versión estable de OkHttp3
 
-    val roomVersion = "2.6.1" // o la última versión estable
-    val retrofit_version = "2.11.0"
-    val lifecycle_version = "2.8.7"
-    val corrutines_version = "1.10.1"
-    val navigation_version = "2.7.5"
-    val okhttp3_version = "4.9.0"
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
+    // *** Dependencias ***
+    implementation("androidx.core:core-ktx:1.12.0") // Usar la última versión estable
+    implementation("androidx.appcompat:appcompat:1.6.1") // Usar la última versión estable
+    implementation("com.google.android.material:material:1.11.0") // Usar la última versión estable
+    implementation("androidx.activity:activity-ktx:1.8.2") // Usar la última versión estable
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    
+    // *** Room ***
     implementation("androidx.room:room-runtime:$roomVersion")
-
-    // Dependencias opcionales
     implementation("androidx.room:room-ktx:$roomVersion") // Extensiones Kotlin
-    implementation("androidx.room:room-paging:$roomVersion") // Soporte para Paging 3
-    testImplementation("androidx.room:room-testing:$roomVersion") // Utilidades para pruebas
     ksp("androidx.room:room-compiler:$roomVersion")
 
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    // *** Retrofit ***
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation("com.squareup.okhttp3:okhttp:$okhttp3Version")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp3Version") // For DEBUG
 
-    // RETROFIT
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
-    implementation("com.squareup.okhttp3:okhttp:$okhttp3_version")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp3_version") // For DEBUG
+    // *** MVVM ***
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
 
-    //MVVM
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    // *** Corrutinas ***
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
-    // CORRUTINAS
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$corrutines_version")
+    // *** Navigation ***
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
-    // NAVIGATION
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
+    // *** Hilt ***
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.48.1")
 
+
+// *** Test ***
+    testImplementation("junit:junit:4.13.2") // JUnit para pruebas unitarias
+    testImplementation("org.mockito:mockito-core:4.8.0") // Mockito para crear mocks
+    testImplementation("com.google.truth:truth:1.1.3") // Truth para aserciones
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3") // Coroutines test para probar coroutines
+    testImplementation("androidx.arch.core:core-testing:2.2.0") // testing de los componentes de Android
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")// Mockito con Kotlin
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

@@ -2,7 +2,6 @@ package com.adolfosalado.practicavn.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +17,9 @@ import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.viewmodels.InvoiceViewModel
 import com.adolfosalado.practicavn.databinding.FragmentFacturasBinding
 import com.adolfosalado.practicavn.ui.adapters.InvoiceAdapter
-import kotlin.getValue
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class InvoicesFragment : Fragment() {
     private lateinit var binding: FragmentFacturasBinding
     private lateinit var adapter: InvoiceAdapter
@@ -34,7 +34,6 @@ class InvoicesFragment : Fragment() {
             val data = result.data
             val filter = data?.getParcelableExtra<InvoiceFilter>("filter")
             filter?.let {
-                Log.d("FRAGMENT_FILTER", "Aplicando filtro: $filter")
                 viewModel.applyFilter(it)
                 getFilter = it
             }
@@ -81,6 +80,12 @@ class InvoicesFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner) { error ->
             Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
         }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.rvFacturas.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.emptyTextView.visibility = View.GONE
+        }
     }
 
     private fun updateRecyclerView(invoices: List<Invoice>) {
@@ -103,7 +108,7 @@ class InvoicesFragment : Fragment() {
                 R.id.action_menu -> {
                     val intent = Intent(requireContext(), InvoicesFilter::class.java)
 
-                    if (getFilter != null) {
+                    if (getFilter != InvoiceFilter()) {
                         intent.putExtra("filter", getFilter)
                     }
                     filterLauncher.launch(intent)
@@ -113,13 +118,6 @@ class InvoicesFragment : Fragment() {
                 else -> false
             }
         }
-
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.rvFacturas.visibility = if (isLoading) View.GONE else View.VISIBLE
-            binding.emptyTextView.visibility = View.GONE
-        }
-
     }
 
     private fun setToolbarTitle(toolbar: androidx.appcompat.widget.Toolbar) {

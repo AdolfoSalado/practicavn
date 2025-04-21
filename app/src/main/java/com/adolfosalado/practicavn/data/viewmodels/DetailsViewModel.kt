@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adolfosalado.practicavn.data.models.SmartSolarDetails
-import com.adolfosalado.practicavn.data.network.RetrofitClient
+import com.adolfosalado.practicavn.data.usecases.GetSmartSolarDetailsUseCase
 import kotlinx.coroutines.launch
 
-class DetailsViewModel : ViewModel() {
-    private val detailsApi = RetrofitClient.apiDetails
+class DetailsViewModel(private val getSmartSolarDetailsUseCase: GetSmartSolarDetailsUseCase) : ViewModel() {
+
     private val _details = MutableLiveData<SmartSolarDetails>()
     val details: LiveData<SmartSolarDetails> = _details
 
@@ -19,28 +19,16 @@ class DetailsViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-
     fun getDetails() {
         _isLoading.value = true
         viewModelScope.launch {
-            try {
-                val result = detailsApi.getSmartSolarDetails().body().let {
-                    SmartSolarDetails(
-                        it?.cau,
-                        it?.estadoAlta,
-                        it?.tipoAutoconsumo,
-                        it?.compensacion,
-                        it?.potencia
-                    )
-                }
+            val result = getSmartSolarDetailsUseCase()
+            if(result != null) {
                 _details.postValue(result)
-                _isLoading.value = false
-            } catch (e: Exception) {
-                _error.postValue("Error: ${e.message}")
-                _isLoading.value = false
-
+            } else {
+                _error.postValue("Error: No se pudieron cargar los detalles")
             }
+            _isLoading.value = false
         }
     }
-
 }

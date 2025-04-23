@@ -88,32 +88,29 @@ class InvoicesFilter : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.maxAmount.observe(this) { max ->
+            val currentAmount = viewModel.amount.value ?: 0.0
+
             binding.sliderImporte.valueFrom = 0f
             binding.sliderImporte.valueTo = max.toFloat()
             binding.textViewMaxValue.text = String.format(Locale.getDefault(), "%.2f €", max)
 
-            viewModel.amount.value?.let {
-                if (it <= max) {
-                    binding.sliderImporte.value = it.toFloat()
-                }
+            // Establece el valor del slider solo si está dentro del rango
+            if (currentAmount <= max) {
+                binding.sliderImporte.value = currentAmount.toFloat()
+                binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", currentAmount)
+            } else {
+                binding.sliderImporte.value = max.toFloat()
+                binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", max)
             }
-            binding.textRangoImporte.text = getString(R.string.range_amount, 0.0, max)
         }
 
         viewModel.dateFrom.observe(this) { dateMillis ->
             binding.inputFechaDesde.setText(formatDateToString(dateMillis))
-            dateFrom = dateMillis // Guarda el valor de dateFrom cuando regresamos a filtros
+            dateFrom = dateMillis // Guarda el valor de dateFrom cuando vuelve al filtro
         }
 
         viewModel.dateTo.observe(this) { dateMillis ->
             binding.inputFechaHasta.setText(formatDateToString(dateMillis))
-        }
-
-        viewModel.amount.observe(this) { amount ->
-            if (amount <= binding.sliderImporte.valueTo) {
-                binding.sliderImporte.value = amount.toFloat()
-                binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", amount)
-            }
         }
 
         viewModel.statusList.observe(this) { statuses ->

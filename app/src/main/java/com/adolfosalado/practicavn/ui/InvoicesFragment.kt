@@ -108,9 +108,10 @@ class InvoicesFragment : Fragment() {
                 R.id.action_menu -> {
                     val intent = Intent(requireContext(), InvoicesFilter::class.java)
 
-                    if (getFilter != InvoiceFilter()) {
+                    if (!getFilter.isEmpty()) {
                         intent.putExtra("filter", getFilter)
                     }
+
                     filterLauncher.launch(intent)
                     true
                 }

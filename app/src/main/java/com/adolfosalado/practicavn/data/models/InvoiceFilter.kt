@@ -16,6 +16,13 @@ data class InvoiceFilter(
         parcel.createStringArrayList() ?: emptyList()
     )
 
+    fun isEmpty(): Boolean {
+        return dateFrom == null &&
+                dateTo == null &&
+                amount == null &&
+                (statusList == null || statusList.isEmpty())
+    }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(dateFrom)
         parcel.writeValue(dateTo)

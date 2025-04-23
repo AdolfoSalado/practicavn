@@ -10,5 +10,5 @@ data class InvoicesResponse(
 data class Invoice(
     @SerializedName("descEstado") val status: String,
     @SerializedName("importeOrdenacion") val amount: Double,
-    @SerializedName("fecha") val date: String // Mantén como String para convertir después
+    @SerializedName("fecha") val date: String
 )

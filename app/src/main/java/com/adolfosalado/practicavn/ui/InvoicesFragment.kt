@@ -2,6 +2,7 @@ package com.adolfosalado.practicavn.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,6 +68,7 @@ class InvoicesFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.invoicesLiveData.observe(viewLifecycleOwner) { invoices ->
+            Log.d("InvoicesFragment", "Invoices received: $invoices")
             updateRecyclerView(invoices)
             if (invoices.isEmpty()) {
                 binding.rvFacturas.visibility = View.GONE
@@ -108,9 +110,10 @@ class InvoicesFragment : Fragment() {
                 R.id.action_menu -> {
                     val intent = Intent(requireContext(), InvoicesFilter::class.java)
 
-                    if (getFilter != InvoiceFilter()) {
+                    if (!getFilter.isEmpty()) {
                         intent.putExtra("filter", getFilter)
                     }
+
                     filterLauncher.launch(intent)
                     true
                 }

@@ -3,6 +3,7 @@ package com.adolfosalado.practicavn.ui
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
@@ -17,11 +18,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Locale
+import kotlin.text.get
 
 @AndroidEntryPoint
 class InvoicesFilter : AppCompatActivity() {
     private lateinit var binding: ActivityInvoicesFilterBinding
     private val viewModel: InvoiceFilterViewModel by viewModels()
+
+    private var dateFrom: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,21 +45,35 @@ class InvoicesFilter : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.inputFechaDesde.setOnClickListener {
-            showDatePickerDialog { year, month, day ->
-                val calendar = Calendar.getInstance().apply {
-                    set(year, month, day, 0, 0, 0)
+            //Vamos a pasarle los parametros.
+            showDatePickerDialog(
+                initialDate = dateFrom,
+                isFrom = true,
+                onDateSet = { year, month, day ->
+                    val calendar = Calendar.getInstance().apply {
+                        set(year, month, day, 0, 0, 0)
+                        set(Calendar.MILLISECOND, 999)
+                    }
+                    viewModel.setDateFrom(calendar.timeInMillis)
+                    dateFrom = calendar.timeInMillis
                 }
-                viewModel.setDateFrom(calendar.timeInMillis)
-            }
+            )
         }
 
         binding.inputFechaHasta.setOnClickListener {
-            showDatePickerDialog { year, month, day ->
-                val calendar = Calendar.getInstance().apply {
-                    set(year, month, day, 23, 59, 59)
+            //Vamos a pasarle los parametros.
+            showDatePickerDialog(
+                initialDate = viewModel.dateTo.value,
+                isFrom = false,
+                minDate = dateFrom,
+                onDateSet = { year, month, day ->
+                    val calendar = Calendar.getInstance().apply {
+                        set(year, month, day, 23, 59, 59)
+                        set(Calendar.MILLISECOND, 999)
+                    }
+                    viewModel.setDateTo(calendar.timeInMillis)
                 }
-                viewModel.setDateTo(calendar.timeInMillis)
-            }
+            )
         }
 
         binding.sliderImporte.addOnChangeListener { slider, value, fromUser ->
@@ -67,12 +85,15 @@ class InvoicesFilter : AppCompatActivity() {
             val resultIntent = Intent().apply {
                 putExtra("filter", viewModel.filter.value)
             }
+
+            Log.d("InvoiceFilter", "Aplicar filtros: ${viewModel.filter.value}")
             setResult(RESULT_OK, resultIntent)
             finish()
         }
 
         binding.btnDeleteFilters.setOnClickListener {
             viewModel.setFilter(InvoiceFilter())
+
         }
 
         binding.sliderImporte.setCustomThumbDrawable(R.drawable.thumb)
@@ -80,31 +101,30 @@ class InvoicesFilter : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.maxAmount.observe(this) { max ->
+            val currentAmount = viewModel.amount.value ?: 0.0
+
             binding.sliderImporte.valueFrom = 0f
             binding.sliderImporte.valueTo = max.toFloat()
             binding.textViewMaxValue.text = String.format(Locale.getDefault(), "%.2f €", max)
 
-            viewModel.amount.value?.let {
-                if (it <= max) {
-                    binding.sliderImporte.value = it.toFloat()
-                }
+            // Establece el valor del slider solo si está dentro del rango
+            if (currentAmount <= max) {
+                binding.sliderImporte.value = currentAmount.toFloat()
+                binding.textRangoImporte.text =
+                    String.format(Locale.getDefault(), "%.2f €", currentAmount)
+            } else {
+                binding.sliderImporte.value = max.toFloat()
+                binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", max)
             }
-            binding.textRangoImporte.text = getString(R.string.range_amount, 0.0, max)
         }
 
         viewModel.dateFrom.observe(this) { dateMillis ->
             binding.inputFechaDesde.setText(formatDateToString(dateMillis))
+            dateFrom = dateMillis // Guarda el valor de dateFrom cuando vuelve al filtro
         }
 
         viewModel.dateTo.observe(this) { dateMillis ->
             binding.inputFechaHasta.setText(formatDateToString(dateMillis))
-        }
-
-        viewModel.amount.observe(this) { amount ->
-            if (amount <= binding.sliderImporte.valueTo) {
-                binding.sliderImporte.value = amount.toFloat()
-                binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", amount)
-            }
         }
 
         viewModel.statusList.observe(this) { statuses ->
@@ -140,6 +160,7 @@ class InvoicesFilter : AppCompatActivity() {
             // Este observador asegura que si el filtro se establece externamente (e.g., al recibir un filtro existente),
             // la UI se actualice completamente. Los observadores individuales de dateFrom, dateTo, amount y statusesSelected
             // también contribuyen a mantener la UI sincronizada.
+            binding.sliderImporte.value = viewModel.amount.value?.toFloat() ?: 0f
         }
     }
 
@@ -158,16 +179,32 @@ class InvoicesFilter : AppCompatActivity() {
         }
     }
 
-    private fun showDatePickerDialog(onDateSet: (year: Int, month: Int, day: Int) -> Unit) {
+    private fun showDatePickerDialog(
+        initialDate: Long? = null,
+        isFrom: Boolean,
+        minDate: Long? = null,
+        onDateSet: (year: Int, month: Int, day: Int) -> Unit
+    ) {
         val calendar = Calendar.getInstance()
-        DatePickerDialog(
+
+        //Vamos a poner la fecha del parametro, sino la actual.
+        if (initialDate != null) {
+            calendar.timeInMillis = initialDate
+        }
+
+        val datePickerDialog = DatePickerDialog(
             this,
             R.style.GreenDatePickerDialog,
             { _, year, month, day -> onDateSet(year, month, day) },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        )
+
+        //Vamos a asignar el minDate, sino es null.
+        minDate?.let { datePickerDialog.datePicker.minDate = it }
+
+        datePickerDialog.show()
     }
 
     private fun formatDateToString(dateMillis: Long?): String {

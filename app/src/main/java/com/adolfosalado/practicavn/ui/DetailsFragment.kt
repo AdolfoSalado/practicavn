@@ -75,7 +75,6 @@ class DetailsFragment : Fragment() {
 
         detailsViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            // También podrías controlar la visibilidad de los EditTexts aquí si lo prefieres
             binding.etCau.root.visibility = if (isLoading) View.GONE else View.VISIBLE
             binding.etEstado.root.visibility = if (isLoading) View.GONE else View.VISIBLE
             binding.etTipo.root.visibility = if (isLoading) View.GONE else View.VISIBLE

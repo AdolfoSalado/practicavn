@@ -1,6 +1,5 @@
 package com.adolfosalado.practicavn.data.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,7 +45,6 @@ class InvoiceViewModel @Inject constructor(
                 syncInvoicesUseCase()
                 val updatedInvoices = getInvoicesUseCase()
 
-                // Aplica el ordenamiento antes de actualizar el LiveData
                 val sortedInvoices = sortInvoices(updatedInvoices)
 
                 _invoicesLiveData.postValue(sortedInvoices)
@@ -54,7 +52,6 @@ class InvoiceViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 _error.postValue("Error al obtener las facturas: ${e.message}")
-                Log.e("API_ERROR", "Error al consultar la API: ${e.message}")
                 _isLoading.value = false
 
             }
@@ -62,21 +59,20 @@ class InvoiceViewModel @Inject constructor(
     }
 
     fun applyFilter(filter: InvoiceFilter) {
-        _isLoading.value = true // Indica que la carga del filtro ha comenzado
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 val filteredInvoices = getFilteredInvoicesUseCase(filter)
 
                 _invoicesLiveData.postValue(sortInvoices(filteredInvoices))
-                _isLoading.value = false // Indica que la carga del filtro ha comenzado
+                _isLoading.value = false
 
             } catch (e: Exception) {
                 _error.postValue("Error al aplicar filtro: ${e.message}")
-                _isLoading.value = false // Indica que la carga del filtro ha comenzado
+                _isLoading.value = false
             }
         }
     }
-
 
     private fun sortInvoices(invoices: List<Invoice>): List<Invoice> {
         return invoices.sortedWith(

@@ -80,6 +80,8 @@ class InvoiceFilterViewModel @Inject constructor(private val repository: Invoice
         _dateTo.value = filter.dateTo
         _amount.value = filter.amount ?: 0.0
         _statusesSelected.value = filter.statusList ?: emptyList()
+
+        loadMaxAmount()
     }
 
     private fun updateFilter(update: (InvoiceFilter) -> InvoiceFilter) {

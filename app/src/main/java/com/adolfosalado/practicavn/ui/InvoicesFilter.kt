@@ -27,6 +27,7 @@ class InvoicesFilter : AppCompatActivity() {
     private val viewModel: InvoiceFilterViewModel by viewModels()
 
     private var dateFrom: Long? = null
+    private var amountSelected: Double? = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +80,6 @@ class InvoicesFilter : AppCompatActivity() {
             viewModel.setAmountSelected(value.toDouble())
             binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", value)
             slider.setTrackActiveTintList(getColorStateList(R.color.green))
-
         }
 
         binding.btnAplicarFiltros.setOnClickListener {
@@ -102,19 +102,20 @@ class InvoicesFilter : AppCompatActivity() {
         viewModel.maxAmount.observe(this) { max ->
             val currentAmount = viewModel.amount.value ?: 0.0
 
+            // Asegúrate de configurar los límites primero.
             binding.sliderImporte.valueFrom = 0f
             binding.sliderImporte.valueTo = max.toFloat()
+
             binding.textViewMaxValue.text = String.format(Locale.getDefault(), "%.2f €", max)
 
-            // Establece el valor del slider solo si está dentro del rango
-            if (currentAmount <= max) {
-                binding.sliderImporte.value = currentAmount.toFloat()
-                binding.textRangoImporte.text =
-                    String.format(Locale.getDefault(), "%.2f €", currentAmount)
-            } else {
-                binding.sliderImporte.value = max.toFloat()
-                binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", max)
-            }
+            // Valida el valor antes de asignarlo al Slider.
+            val validatedValue = currentAmount.coerceIn(
+                binding.sliderImporte.valueFrom.toDouble(),
+                binding.sliderImporte.valueTo.toDouble()
+            )
+            binding.sliderImporte.value = validatedValue.toFloat()
+
+            binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", validatedValue)
         }
 
         viewModel.dateFrom.observe(this) { dateMillis ->
@@ -159,7 +160,6 @@ class InvoicesFilter : AppCompatActivity() {
             // Este observador asegura que si el filtro se establece externamente (e.g., al recibir un filtro existente),
             // la UI se actualice completamente. Los observadores individuales de dateFrom, dateTo, amount y statusesSelected
             // también contribuyen a mantener la UI sincronizada.
-            binding.sliderImporte.value = viewModel.amount.value?.toFloat() ?: 0f
         }
     }
 

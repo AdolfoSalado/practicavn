@@ -1,5 +1,6 @@
 package com.adolfosalado.practicavn.data.repository
 
+import android.util.Log
 import com.adolfosalado.practicavn.data.database.daos.InvoiceDao
 import com.adolfosalado.practicavn.data.database.entities.InvoiceEntity
 import com.adolfosalado.practicavn.data.models.Invoice
@@ -56,13 +57,16 @@ open class InvoiceRepository(
     }
 
     suspend fun deleteAllInvoices() = invoiceDao.deleteAllInvoices()
+
     suspend fun insertInvoices(invoices: List<Invoice>) {
         invoiceDao.insertInvoices(invoices.map { mapInvoiceToEntity(it) })
     }
 
     private fun mapInvoiceToEntity(invoice: Invoice): InvoiceEntity {
+        Log.d("InvoiceRepository", "Mapping invoice: $invoice")
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val dateTimestamp = dateFormat.parse(invoice.date)?.time ?: 0L
-        return InvoiceEntity(0, dateTimestamp, invoice.amount, invoice.status)
+        val roundedAmount = "%.2f".format(Locale.US, invoice.amount).toDouble()
+        return InvoiceEntity(0, dateTimestamp, roundedAmount, invoice.status)
     }
 }

@@ -1,6 +1,7 @@
 package com.adolfosalado.practicavn.ui.adapters
 
 import android.app.AlertDialog
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,9 +23,7 @@ class InvoiceAdapter(private var invoices: List<Invoice>) :
             binding.tvStatus.text = invoice.status
 
 
-            val formatoDeseado = SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
-            val fechaFormateada = formatoDeseado.format(Date(invoice.date))
-            binding.tvDate.text = fechaFormateada
+            binding.tvDate.text = invoice.date
 
             // Cambiar el color del texto, y la visibilidad, de "status" según el estado
             if (invoice.status == this.itemView.context.getString(R.string.pendiente_de_pago)) {

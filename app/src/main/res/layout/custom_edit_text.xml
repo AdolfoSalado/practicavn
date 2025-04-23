@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="4dp"
-        android:text="Título del campo"
         android:textColor="@color/grey"
         android:textSize="14sp" />
 

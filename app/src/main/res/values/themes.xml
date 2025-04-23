@@ -115,6 +115,10 @@
     <!-- Estilo para el Slider. -->
     <style name="MySliderStyle" parent="Widget.MaterialComponents.Slider">
         <item name="labelStyle">@style/MySliderLabelStyle</item>
+        <item name="trackColor">@color/grey</item>
+        <item name="trackColorInactive">@color/grey</item>
+        <item name="android:progressDrawable">@drawable/slider_track_custom</item>
+
     </style>
 
     <!-- Estilo para el "bubble" del Slider. -->

@@ -160,10 +160,7 @@
             app:haloRadius="0dp"
             app:thumbColor="@color/green"
             app:thumbRadius="10dp"
-            app:tickColor="@color/green"
-            app:trackColor="@color/green"
-            app:trackColorActive="@color/green"
-            app:trackColorInactive="@color/green" />
+            app:tickColor="@color/grey" />
 
 
         <TextView

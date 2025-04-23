@@ -73,7 +73,6 @@ class InvoiceRepositoryTest {
                 dateTo = filter.dateTo,
                 amount = filter.amount,
                 statusList = filter.statusList,
-                statusListSize = filter.statusList?.size ?: 0
             )
         ).thenReturn(invoices)
 

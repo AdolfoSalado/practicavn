@@ -34,20 +34,18 @@ class InvoiceAdapter(private var invoices: List<Invoice>) :
                 binding.tvStatus.visibility = View.INVISIBLE
             }
 
-            // Establecer OnClickListener para la celda
             itemView.setOnClickListener {
                 val builder = AlertDialog.Builder(itemView.context)
                     .setTitle("Información")
                     .setMessage("Esta funcionalidad aún no está disponible")
                     .setNegativeButton("Cerrar") { dialog, _ ->
-                        dialog.dismiss() // Cierra el diálogo al hacer clic en "Cerrar"
+                        dialog.dismiss()
                     }
 
                 val alertDialog = builder.show()
                 alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
                     .setTextColor(itemView.context.getColor(R.color.green))
             }
-
         }
     }
 

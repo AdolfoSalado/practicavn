@@ -1,6 +1,5 @@
 package com.adolfosalado.practicavn.data.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -85,6 +84,5 @@ class InvoiceFilterViewModel @Inject constructor(private val repository: Invoice
     private fun updateFilter(update: (InvoiceFilter) -> InvoiceFilter) {
         val current = _filter.value ?: InvoiceFilter(null, null, null, emptyList())
         _filter.value = update(current)
-        Log.d("FILTER_VIEWMODEL", "Filtro actualizado: ${_filter.value}")
     }
 }

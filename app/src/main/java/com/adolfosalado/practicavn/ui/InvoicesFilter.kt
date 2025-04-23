@@ -23,6 +23,8 @@ class InvoicesFilter : AppCompatActivity() {
     private lateinit var binding: ActivityInvoicesFilterBinding
     private val viewModel: InvoiceFilterViewModel by viewModels()
 
+    private var dateFrom: Long? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInvoicesFilterBinding.inflate(layoutInflater)
@@ -41,21 +43,27 @@ class InvoicesFilter : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.inputFechaDesde.setOnClickListener {
-            showDatePickerDialog { year, month, day ->
-                val calendar = Calendar.getInstance().apply {
-                    set(year, month, day, 0, 0, 0)
+            showDatePickerDialog(
+                onDateSet = { year, month, day ->
+                    val calendar = Calendar.getInstance().apply {
+                        set(year, month, day, 0, 0, 0)
+                    }
+                    viewModel.setDateFrom(calendar.timeInMillis)
+                    dateFrom = calendar.timeInMillis
                 }
-                viewModel.setDateFrom(calendar.timeInMillis)
-            }
+            )
         }
 
         binding.inputFechaHasta.setOnClickListener {
-            showDatePickerDialog { year, month, day ->
-                val calendar = Calendar.getInstance().apply {
-                    set(year, month, day, 23, 59, 59)
+            showDatePickerDialog(
+                minDate = dateFrom,
+                onDateSet = { year, month, day ->
+                    val calendar = Calendar.getInstance().apply {
+                        set(year, month, day, 23, 59, 59)
+                    }
+                    viewModel.setDateTo(calendar.timeInMillis)
                 }
-                viewModel.setDateTo(calendar.timeInMillis)
-            }
+            )
         }
 
         binding.sliderImporte.addOnChangeListener { slider, value, fromUser ->
@@ -94,6 +102,7 @@ class InvoicesFilter : AppCompatActivity() {
 
         viewModel.dateFrom.observe(this) { dateMillis ->
             binding.inputFechaDesde.setText(formatDateToString(dateMillis))
+            dateFrom = dateMillis // Guarda el valor de dateFrom cuando regresamos a filtros
         }
 
         viewModel.dateTo.observe(this) { dateMillis ->
@@ -158,7 +167,10 @@ class InvoicesFilter : AppCompatActivity() {
         }
     }
 
-    private fun showDatePickerDialog(onDateSet: (year: Int, month: Int, day: Int) -> Unit) {
+    private fun showDatePickerDialog(
+        minDate: Long? = null,
+        onDateSet: (year: Int, month: Int, day: Int) -> Unit
+    ) {
         val calendar = Calendar.getInstance()
         DatePickerDialog(
             this,
@@ -167,7 +179,9 @@ class InvoicesFilter : AppCompatActivity() {
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        ).apply {
+            minDate?.let { datePicker.minDate = it }
+        }.show()
     }
 
     private fun formatDateToString(dateMillis: Long?): String {

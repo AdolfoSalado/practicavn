@@ -28,7 +28,7 @@ interface InvoiceDao {
     @Query("SELECT * FROM invoice_table WHERE status = :status")
     suspend fun getInvoicesByStatus(status: String): List<InvoiceEntity>
 
-    @Query("SELECT * FROM invoice_table WHERE date BETWEEN :from AND :to")
+    @Query("SELECT * FROM invoice_table WHERE date >= :from AND date <= :to")
     suspend fun getInvoicesByDate(from: Long, to: Long): List<InvoiceEntity>
 
     @Query("SELECT DISTINCT status FROM invoice_table")

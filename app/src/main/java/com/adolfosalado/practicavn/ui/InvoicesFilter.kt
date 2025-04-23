@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Locale
+import kotlin.text.get
 
 @AndroidEntryPoint
 class InvoicesFilter : AppCompatActivity() {
@@ -43,10 +44,14 @@ class InvoicesFilter : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.inputFechaDesde.setOnClickListener {
+            //Vamos a pasarle los parametros.
             showDatePickerDialog(
+                initialDate = dateFrom,
+                isFrom = true,
                 onDateSet = { year, month, day ->
                     val calendar = Calendar.getInstance().apply {
                         set(year, month, day, 0, 0, 0)
+                        set(Calendar.MILLISECOND, 999)
                     }
                     viewModel.setDateFrom(calendar.timeInMillis)
                     dateFrom = calendar.timeInMillis
@@ -55,11 +60,15 @@ class InvoicesFilter : AppCompatActivity() {
         }
 
         binding.inputFechaHasta.setOnClickListener {
+            //Vamos a pasarle los parametros.
             showDatePickerDialog(
+                initialDate = viewModel.dateTo.value,
+                isFrom = false,
                 minDate = dateFrom,
                 onDateSet = { year, month, day ->
                     val calendar = Calendar.getInstance().apply {
                         set(year, month, day, 23, 59, 59)
+                        set(Calendar.MILLISECOND, 999)
                     }
                     viewModel.setDateTo(calendar.timeInMillis)
                 }
@@ -97,7 +106,8 @@ class InvoicesFilter : AppCompatActivity() {
             // Establece el valor del slider solo si está dentro del rango
             if (currentAmount <= max) {
                 binding.sliderImporte.value = currentAmount.toFloat()
-                binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", currentAmount)
+                binding.textRangoImporte.text =
+                    String.format(Locale.getDefault(), "%.2f €", currentAmount)
             } else {
                 binding.sliderImporte.value = max.toFloat()
                 binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", max)
@@ -165,20 +175,31 @@ class InvoicesFilter : AppCompatActivity() {
     }
 
     private fun showDatePickerDialog(
+        initialDate: Long? = null,
+        isFrom: Boolean,
         minDate: Long? = null,
         onDateSet: (year: Int, month: Int, day: Int) -> Unit
     ) {
         val calendar = Calendar.getInstance()
-        DatePickerDialog(
+
+        //Vamos a poner la fecha del parametro, sino la actual.
+        if (initialDate != null) {
+            calendar.timeInMillis = initialDate
+        }
+
+        val datePickerDialog = DatePickerDialog(
             this,
             R.style.GreenDatePickerDialog,
             { _, year, month, day -> onDateSet(year, month, day) },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        ).apply {
-            minDate?.let { datePicker.minDate = it }
-        }.show()
+        )
+
+        //Vamos a asignar el minDate, sino es null.
+        minDate?.let { datePickerDialog.datePicker.minDate = it }
+
+        datePickerDialog.show()
     }
 
     private fun formatDateToString(dateMillis: Long?): String {

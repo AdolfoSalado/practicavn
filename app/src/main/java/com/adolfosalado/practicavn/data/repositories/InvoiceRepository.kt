@@ -6,6 +6,7 @@ import com.adolfosalado.practicavn.data.models.Invoice
 import com.adolfosalado.practicavn.data.models.InvoiceFilter
 import com.adolfosalado.practicavn.data.network.ApiService
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 open class InvoiceRepository(
@@ -15,14 +16,26 @@ open class InvoiceRepository(
 
     suspend fun getAllInvoices(): List<InvoiceEntity> = invoiceDao.getAllInvoices()
 
-    suspend fun getFilteredInvoices(filter: InvoiceFilter): List<InvoiceEntity> =
-        invoiceDao.getFilteredInvoices(
+    suspend fun getFilteredInvoices(filter: InvoiceFilter): List<InvoiceEntity> {
+        val adjustedDateTo = filter.dateTo?.let {
+            Calendar.getInstance().apply {
+                timeInMillis = it
+                set(Calendar.HOUR_OF_DAY, 23)
+                set(Calendar.MINUTE, 59)
+                set(Calendar.SECOND, 59)
+                set(Calendar.MILLISECOND, 999)
+            }.timeInMillis
+        }
+
+        return invoiceDao.getFilteredInvoices(
             dateFrom = filter.dateFrom,
-            dateTo = filter.dateTo,
+            dateTo = adjustedDateTo,
             amount = filter.amount,
             statusList = filter.statusList ?: emptyList(),
-            statusListSize = filter.statusList?.size ?: 0
+            applyStatusList = if ((filter.statusList?.isNotEmpty() == true)) 1 else 0
         )
+    }
+
 
     suspend fun getInvoiceCount(): Int = invoiceDao.getInvoiceCount()
 

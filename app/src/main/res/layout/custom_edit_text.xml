@@ -14,17 +14,23 @@
         android:textColor="@color/grey"
         android:textSize="14sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/etCustom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Escribe aquí"
-        android:inputType="textMultiLine"
         android:gravity="top|start"
         android:paddingTop="25dp"
         android:paddingEnd="40dp"
+        android:editable="false"
         android:minLines="1"
         android:maxLines="5" />
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/etCustom"
+        android:layout_margin="3dp"
+        android:background="@color/grey" />
 
     <ImageView
         android:id="@+id/ivPopupIcon"
@@ -38,6 +44,7 @@
         android:focusable="true"
         android:src="@drawable/popup"
         android:visibility="invisible" />
+
 
 
 </RelativeLayout>

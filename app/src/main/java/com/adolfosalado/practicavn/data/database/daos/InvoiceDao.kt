@@ -40,7 +40,7 @@ interface InvoiceDao {
     WHERE (:dateFrom IS NULL OR date >= :dateFrom)
     AND (:dateTo IS NULL OR date <= :dateTo)
     AND (:amount IS NULL OR amount BETWEEN 0 AND :amount)
-    AND (:statusListSize = 0 OR status IN (:statusList))
+    AND (:applyStatusList IS 0 OR status IN (:statusList))
 """
     )
     suspend fun getFilteredInvoices(
@@ -48,7 +48,7 @@ interface InvoiceDao {
         dateTo: Long? = null,
         amount: Double? = null,
         statusList: List<String>? = emptyList(),
-        statusListSize: Int = 0
+        applyStatusList: Int = 0
     ): List<InvoiceEntity>
 
 

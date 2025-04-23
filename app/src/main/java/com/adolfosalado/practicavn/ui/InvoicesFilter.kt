@@ -3,6 +3,7 @@ package com.adolfosalado.practicavn.ui
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
@@ -84,12 +85,15 @@ class InvoicesFilter : AppCompatActivity() {
             val resultIntent = Intent().apply {
                 putExtra("filter", viewModel.filter.value)
             }
+
+            Log.d("InvoiceFilter", "Aplicar filtros: ${viewModel.filter.value}")
             setResult(RESULT_OK, resultIntent)
             finish()
         }
 
         binding.btnDeleteFilters.setOnClickListener {
             viewModel.setFilter(InvoiceFilter())
+
         }
 
         binding.sliderImporte.setCustomThumbDrawable(R.drawable.thumb)
@@ -156,6 +160,7 @@ class InvoicesFilter : AppCompatActivity() {
             // Este observador asegura que si el filtro se establece externamente (e.g., al recibir un filtro existente),
             // la UI se actualice completamente. Los observadores individuales de dateFrom, dateTo, amount y statusesSelected
             // también contribuyen a mantener la UI sincronizada.
+            binding.sliderImporte.value = viewModel.amount.value?.toFloat() ?: 0f
         }
     }
 

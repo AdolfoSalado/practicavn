@@ -63,7 +63,6 @@ open class InvoiceRepository(
     }
 
     private fun mapInvoiceToEntity(invoice: Invoice): InvoiceEntity {
-        Log.d("InvoiceRepository", "Mapping invoice: $invoice")
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val dateTimestamp = dateFormat.parse(invoice.date)?.time ?: 0L
         val roundedAmount = "%.2f".format(Locale.US, invoice.amount).toDouble()

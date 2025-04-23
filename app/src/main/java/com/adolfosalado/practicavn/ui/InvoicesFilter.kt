@@ -2,6 +2,7 @@ package com.adolfosalado.practicavn.ui
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -45,7 +46,6 @@ class InvoicesFilter : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.inputFechaDesde.setOnClickListener {
-            //Vamos a pasarle los parametros.
             showDatePickerDialog(
                 initialDate = dateFrom,
                 isFrom = true,
@@ -61,7 +61,6 @@ class InvoicesFilter : AppCompatActivity() {
         }
 
         binding.inputFechaHasta.setOnClickListener {
-            //Vamos a pasarle los parametros.
             showDatePickerDialog(
                 initialDate = viewModel.dateTo.value,
                 isFrom = false,
@@ -79,6 +78,8 @@ class InvoicesFilter : AppCompatActivity() {
         binding.sliderImporte.addOnChangeListener { slider, value, fromUser ->
             viewModel.setAmountSelected(value.toDouble())
             binding.textRangoImporte.text = String.format(Locale.getDefault(), "%.2f €", value)
+            slider.setTrackActiveTintList(getColorStateList(R.color.green))
+
         }
 
         binding.btnAplicarFiltros.setOnClickListener {
@@ -86,14 +87,12 @@ class InvoicesFilter : AppCompatActivity() {
                 putExtra("filter", viewModel.filter.value)
             }
 
-            Log.d("InvoiceFilter", "Aplicar filtros: ${viewModel.filter.value}")
             setResult(RESULT_OK, resultIntent)
             finish()
         }
 
         binding.btnDeleteFilters.setOnClickListener {
             viewModel.setFilter(InvoiceFilter())
-
         }
 
         binding.sliderImporte.setCustomThumbDrawable(R.drawable.thumb)
